@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
@@ -22,8 +21,8 @@ namespace RedditTextToSpeech.Logic.Services
         {
             await Task.Run(() =>
             {
-                var font = new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold, GraphicsUnit.Pixel);
-                var topFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular, GraphicsUnit.Pixel);
+                var font = new Font(FontFamily.GenericSerif, 20, FontStyle.Bold, GraphicsUnit.Pixel);
+                var topFont = new Font(FontFamily.GenericSerif, 14, FontStyle.Regular, GraphicsUnit.Pixel);
                 var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
 
                 var bitmapHeight = (int)retBitmapGraphics.MeasureString(title, font, maxWidth).Height;
@@ -57,12 +56,12 @@ namespace RedditTextToSpeech.Logic.Services
         {
             await Task.Run(() =>
             {
-                var font = new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold, GraphicsUnit.Pixel);
+                var font = new Font(FontFamily.GenericSerif, 14, FontStyle.Regular, GraphicsUnit.Pixel);
                 var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
 
                 var bitmapHeight = (int)retBitmapGraphics.MeasureString(text, font, maxWidth).Height;
 
-                var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + 5);
+                var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + 10);
                 using var graphicsPath = this.CreatePath(rect, 15, true);
                 var retBitmap = new Bitmap(rect.Width, rect.Height);
                 retBitmap.MakeTransparent();
