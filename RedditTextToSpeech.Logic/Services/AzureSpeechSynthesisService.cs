@@ -17,9 +17,6 @@ namespace RedditTextToSpeech.Logic.Services
             this.auth = new AzureAuthenticationService($"https://{server}.api.cognitive.microsoft.com/sts/v1.0/issuetoken", key);
         }
 
-        /// <summary>
-        /// Random selection of english speaking male voices.
-        /// </summary>
         public string[] MaleVoices => new string[]
         {
             "en-AU-WilliamNeural",
@@ -35,9 +32,6 @@ namespace RedditTextToSpeech.Logic.Services
             "en-GB-AlfieNeural"
         };
 
-        /// <summary>
-        /// Random selection of english speaking female voices.
-        /// </summary>
         public string[] FemaleVoices => new string[] {
             "en-IE-EmilyNeural",
             "en-NZ-MollyNeural",
