@@ -14,11 +14,11 @@ namespace RedditTextToSpeech.Logic.Factories
             this.synthesisService = synthesisService;
         }
 
-        public async Task<FilePath> GetAudioClip(string text, string voice)
+        public async Task<string> GetAudioClip(string text, string voice)
         {
             var path = $"{Guid.NewGuid().ToString()}";
             var file = await this.synthesisService.GetSound(path, voice, text);
-            return new FilePath(path);
+            return path;
         }
     }
 }
