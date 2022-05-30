@@ -16,9 +16,9 @@ namespace RedditTextToSpeech.Logic.Factories
 
         public async Task<string> GetAudioClip(string text, string voice)
         {
-            var path = $"{Guid.NewGuid().ToString()}";
+            var path = Guid.NewGuid().ToString();
             var file = await this.synthesisService.GetSound(path, voice, text);
-            return path;
+            return file;
         }
     }
 }
