@@ -3,8 +3,8 @@ using RedditTextToSpeech.Core;
 
 namespace RedditTextToSpeech.Logic.Services
 {
-    internal interface IRedditService
+    public interface IRedditService
     {
-        public Post GetPostInformation(string url);
+        public Post GetPostInformation(string url, int? commentCount = 0);
     }
 }
