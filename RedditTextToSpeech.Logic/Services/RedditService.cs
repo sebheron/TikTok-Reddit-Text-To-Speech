@@ -6,33 +6,32 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RedditTextToSpeech.Logic.Services
 {
     public class RedditService : IRedditService
     {
-        public Post GetPostInformation(string url)
+        public Post GetPostInformation(string url, int? commentCount = 0)
         {
             //Get JSON from URL and parse.
-            var postJson = this.GetJsonStringFromURL($"{url}");
+            var postJson = this.GetJsonStringFromURL($"{url}.json");
             var array = JArray.Parse(postJson);
             if (!array.HasValues) throw new ArgumentException();
 
             //Parse post details.
-            var postData = array[0]?.SelectTokens("$..children")
-                .First()
-                .SelectToken("$.data");
+            var postData = array[0]?.SelectTokens("$..children").First().SelectToken("$..data");
             if (postData == null) throw new NullReferenceException("Post is null");
             var post = this.ParsePost(postData);
 
             if (array.Count <= 1) return post;
 
             //Parse comments details.
-            var comments = array[1]?.SelectTokens("$..children");
+            var comments = array[1]?.SelectTokens("$..children").ToArray();
             if (comments == null) throw new NullReferenceException("Comments are null");
-            foreach (var comment in comments)
+            for (int i = 0; i < commentCount && i < comments.Length; i++)
             {
-                var commentData = comment?.SelectToken("$.data");
+                var commentData = comments[i]?.SelectToken("$..data");
                 if (commentData == null) throw new NullReferenceException("Comment is null");
                 post.Comments.Add(this.ParseComment(commentData));
             }
@@ -120,11 +119,15 @@ namespace RedditTextToSpeech.Logic.Services
                     if (sb.Length + sentence.Length + 1 > 350) break;
                     sb.Append(sentence + ".");
                 }
-                paragraphs.Add(sb.ToString().Trim());
+                
+                if (!Regex.IsMatch(paragraph, "[Tt][Ll]([;:]?)[Dd][Rr]"))
+                {
+                    paragraphs.Add(sb.ToString().Trim());
+                }
 
                 paragraphs.AddRange(SubsectionParagraphs(paragraph[sb.Length..]));
             }
-            else
+            else if (!Regex.IsMatch(paragraph, "[Tt][Ll]([;:]?)[Dd][Rr]"))
             {
                 paragraphs.Add(paragraph.Trim());
             }
