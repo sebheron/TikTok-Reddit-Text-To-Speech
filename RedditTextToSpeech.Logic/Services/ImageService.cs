@@ -2,6 +2,7 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services
@@ -17,12 +18,47 @@ namespace RedditTextToSpeech.Logic.Services
 
         public string Extension => ".png";
 
+        public async Task<string> GetImage(string path, string title, string username, string subreddit, string avatar)
+        {
+            await Task.Run(() =>
+            {
+                var font = new Font(new FontFamily("Arial"), 14, FontStyle.Regular, GraphicsUnit.Pixel);
+                var topFont = new Font(new FontFamily("Arial"), 12, FontStyle.Regular, GraphicsUnit.Pixel);
+                var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
+
+                var tb = new TextureBrush(new Bitmap(avatar), WrapMode.Tile);
+
+                var bitmapHeight = (int)retBitmapGraphics.MeasureString(title, font, maxWidth).Height;
+                var usernameHeight = (int)retBitmapGraphics.MeasureString(username, topFont, maxWidth).Height;
+
+                var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + 35);
+                using var graphicsPath = this.CreatePath(rect, 15, true);
+                var retBitmap = new Bitmap(rect.Width, rect.Height);
+                retBitmap.MakeTransparent();
+                retBitmapGraphics = Graphics.FromImage(retBitmap);
+                retBitmapGraphics.FillPath(new SolidBrush(Color.FromArgb(220, 26, 26, 27)), graphicsPath);
+                retBitmapGraphics.DrawPath(new Pen(Color.FromArgb(220, 7, 7, 7), 1), graphicsPath);
+                retBitmapGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+                retBitmapGraphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+
+                retBitmapGraphics.FillEllipse(tb, new RectangleF(5, 5, 30, 30));
+                retBitmapGraphics.DrawString(username, topFont, new SolidBrush(Color.FromArgb(127, 159, 227)),
+                        new RectangleF(35, 5, maxWidth, usernameHeight));
+                retBitmapGraphics.DrawString(title, font, new SolidBrush(Color.FromArgb(215, 218, 220)),
+                    new RectangleF(5, 35, maxWidth, bitmapHeight));
+                retBitmapGraphics.Flush();
+
+                retBitmap.Save(path + this.Extension, ImageFormat.Png);
+            });
+            return path + this.Extension;
+        }
+
         public async Task<string> GetImage(string path, string title, string username, string subreddit)
         {
             await Task.Run(() =>
             {
-                var font = new Font(FontFamily.GenericSerif, 20, FontStyle.Bold, GraphicsUnit.Pixel);
-                var topFont = new Font(FontFamily.GenericSerif, 14, FontStyle.Regular, GraphicsUnit.Pixel);
+                var font = new Font(new FontFamily("Arial"), 20, FontStyle.Bold, GraphicsUnit.Pixel);
+                var topFont = new Font(new FontFamily("Arial"), 12, FontStyle.Regular, GraphicsUnit.Pixel);
                 var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
 
                 var bitmapHeight = (int)retBitmapGraphics.MeasureString(title, font, maxWidth).Height;
@@ -56,7 +92,7 @@ namespace RedditTextToSpeech.Logic.Services
         {
             await Task.Run(() =>
             {
-                var font = new Font(FontFamily.GenericSerif, 14, FontStyle.Regular, GraphicsUnit.Pixel);
+                var font = new Font(new FontFamily("Arial"), 14, FontStyle.Regular, GraphicsUnit.Pixel);
                 var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
 
                 var bitmapHeight = (int)retBitmapGraphics.MeasureString(text, font, maxWidth).Height;

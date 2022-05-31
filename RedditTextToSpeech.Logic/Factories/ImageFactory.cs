@@ -14,6 +14,13 @@ namespace RedditTextToSpeech.Logic.Factories
             this.imageService = imageService;
         }
 
+        public async Task<string> GetImage(string title, string username, string subreddit, string avatar)
+        {
+            var path = Guid.NewGuid().ToString();
+            var file = await this.imageService.GetImage(path, title, username, subreddit, avatar);
+            return file;
+        }
+
         public async Task<string> GetImage(string title, string username, string subreddit)
         {
             var path = Guid.NewGuid().ToString();

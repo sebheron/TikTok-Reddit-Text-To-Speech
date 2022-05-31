@@ -4,6 +4,8 @@ namespace RedditTextToSpeech.Logic.Services
 {
     public interface IImageService
     {
+        Task<string> GetImage(string path, string title, string username, string subreddit, string avatar);
+
         /// <summary>
         /// Gets a image representing a reddit title.
         /// </summary>
