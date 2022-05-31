@@ -25,7 +25,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// </summary>
         /// <param name="text">The text to read.</param>
         /// <param name="voice">The voice.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetAudioClip(string text, string voice)
         {
             var path = Guid.NewGuid().ToString();

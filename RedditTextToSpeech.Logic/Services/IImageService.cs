@@ -20,7 +20,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="username">The username of the user.</param>
         /// <param name="subreddit">The subreddit.</param>
         /// <param name="avatar">Link to users avatar.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         Task<string> GetImage(string path, string text, string username, string subreddit, string avatar);
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="title">The title of the post.</param>
         /// <param name="username">The username of the user.</param>
         /// <param name="subreddit">The subreddit.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         Task<string> GetImage(string path, string title, string username, string subreddit);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// </summary>
         /// <param name="path">The image path to save to.</param>
         /// <param name="text">The text to display.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         Task<string> GetImage(string path, string text);
     }
 }

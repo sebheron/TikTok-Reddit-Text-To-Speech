@@ -28,7 +28,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="values">The audio image values.</param>
         /// <param name="startTime">The start time.</param>
         /// <param name="background">The background.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background)
         {
             var path = Guid.NewGuid().ToString();

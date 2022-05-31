@@ -76,7 +76,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="path">The file path.</param>
         /// <param name="voice">The voice to use.</param>
         /// <param name="text">The text.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetSound(string path, string voice, string text)
         {
             var body = new XDocument(

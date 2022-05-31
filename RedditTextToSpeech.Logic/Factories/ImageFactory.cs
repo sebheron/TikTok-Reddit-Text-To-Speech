@@ -27,7 +27,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="username">Username to display.</param>
         /// <param name="subreddit">Subreddit to display.</param>
         /// <param name="avatar">The link to the saved avatar.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetImage(string text, string username, string subreddit, string avatar)
         {
             var path = Guid.NewGuid().ToString();
@@ -41,7 +41,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="title">The display title.</param>
         /// <param name="username">Username to display.</param>
         /// <param name="subreddit">Subreddit to display.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetImage(string title, string username, string subreddit)
         {
             var path = Guid.NewGuid().ToString();
@@ -53,7 +53,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// Gets the image.
         /// </summary>
         /// <param name="text">The display text.</param>
-        /// <returns>Awaitable task returning string.</returns>
+        /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetImage(string text)
         {
             var path = Guid.NewGuid().ToString();
