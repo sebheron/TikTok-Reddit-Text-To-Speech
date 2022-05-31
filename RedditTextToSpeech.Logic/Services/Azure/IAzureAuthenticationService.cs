@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace RedditTextToSpeech.Logic.Services
+namespace RedditTextToSpeech.Logic.Services.Azure
 {
     /// <summary>
     /// The azure authentication service interface.
