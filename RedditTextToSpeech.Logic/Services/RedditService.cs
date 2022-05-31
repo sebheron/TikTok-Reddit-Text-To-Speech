@@ -10,8 +10,17 @@ using System.Text.RegularExpressions;
 
 namespace RedditTextToSpeech.Logic.Services
 {
+    /// <summary>
+    /// The reddit service.
+    /// </summary>
     public class RedditService : IRedditService
     {
+        /// <summary>
+        /// Gets the post information as a <see cref="Post"/> object.
+        /// </summary>
+        /// <param name="url">The url of the reddit post.</param>
+        /// <param name="commentCount">The number of comments to collect.</param>
+        /// <returns>Post object containing post information.</returns>
         public Post GetPostInformation(string url, int? commentCount = 0)
         {
             //Get JSON from URL and parse.
@@ -39,47 +48,56 @@ namespace RedditTextToSpeech.Logic.Services
             return post;
         }
 
-        private string? DownloadImage(string url)
-        {
-            var path = $"{Guid.NewGuid()}.png";
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(new Uri(url.Split("?")[0]), path);
-            }
-            return path;
-        }
-
-        private string? GetAvatarUrl(string username)
+        /// <summary>
+        /// Gets the avatar url.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <returns>Avatar url.</returns>
+        private string GetAvatarUrl(string username)
         {
             if (username != "[deleted]")
             {
                 var json = this.GetJsonStringFromURL($"https://www.reddit.com/user/{username}/about.json");
                 var about = JObject.Parse(json);
-                return this.DownloadImage(about.SelectTokens("$..icon_img")?.First()?.Value<string>());
+                return about.SelectTokens("$..icon_img")?.First()?.Value<string>() ?? String.Empty;
             }
-            return null;
+            return String.Empty;
         }
 
-        private string? GetIconUrl(string subreddit)
+        /// <summary>
+        /// Gets the icon url.
+        /// </summary>
+        /// <param name="subreddit">The subreddit.</param>
+        /// <returns>Subreddit icon url.</returns>
+        private string GetIconUrl(string subreddit)
         {
             var json = this.GetJsonStringFromURL($"https://www.reddit.com/r/{subreddit}/about.json");
             var about = JObject.Parse(json);
-            return this.DownloadImage(about.SelectToken("$..icon_img")?.Value<string>());
+            return about.SelectToken("$..icon_img")?.Value<string>() ?? String.Empty;
         }
 
+        /// <summary>
+        /// Sends a HTTP request for JSON data for the reddit page.
+        /// </summary>
+        /// <param name="url">The url.</param>
+        /// <returns>Unparsed JSON data.</returns>
         private string GetJsonStringFromURL(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            using var response = (HttpWebResponse)request.GetResponse();
+            using var stream = response.GetResponseStream();
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
         }
 
+        /// <summary>
+        /// Gets the display paragraphs.
+        /// Display paragraphs are limited to a length to show less text on screen.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns>Sensible partitions of paragraphs.</returns>
         private IList<string> GetParagraphs(IEnumerable<string> content)
         {
             var displayParagraphs = new List<string>();
@@ -90,6 +108,12 @@ namespace RedditTextToSpeech.Logic.Services
             return displayParagraphs;
         }
 
+        /// <summary>
+        /// Parses the comment.
+        /// </summary>
+        /// <param name="commentData">The comment data JToken.</param>
+        /// <exception cref="Exception">Throws an exception if the content can't be retrieved.</exception>
+        /// <returns>A Comment instance.</returns>
         private Comment ParseComment(JToken commentData)
         {
             var username = commentData.SelectToken("$.author")?.Value<string>();
@@ -97,8 +121,7 @@ namespace RedditTextToSpeech.Logic.Services
                 .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
             var flair = commentData.SelectToken("$.author_flair_text")?.Value<string>();
 
-            if (username == null) throw new Exception();
-            if (content == null) throw new Exception();
+            if (username == null || content == null || flair == null) throw new NullReferenceException();
 
             return new Comment(this.GetAvatarUrl(username),
                 username,
@@ -106,6 +129,12 @@ namespace RedditTextToSpeech.Logic.Services
                 flair);
         }
 
+        /// <summary>
+        /// Parses the post.
+        /// </summary>
+        /// <param name="postData">The post data JToken.</param>
+        /// <exception cref="Exception">Throws an exception if the content can't be retrieved.</exception>
+        /// <returns>A Post instance.</returns>
         private Post ParsePost(JToken postData)
         {
             var subreddit = postData.SelectToken("$.subreddit")?.Value<string>();
@@ -115,8 +144,7 @@ namespace RedditTextToSpeech.Logic.Services
                 .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
             var flair = postData.SelectToken("$.link_flair_text")?.Value<string>();
 
-            if (content == null) throw new Exception();
-            if (subreddit == null) throw new Exception();
+            if (content == null || subreddit == null || username == null || postTitle == null || flair == null) throw new NullReferenceException();
 
             return new Post(subreddit,
                 username,
@@ -126,6 +154,11 @@ namespace RedditTextToSpeech.Logic.Services
                 flair);
         }
 
+        /// <summary>
+        /// Subsections the paragraphs up into reasonble chunks.
+        /// </summary>
+        /// <param name="paragraph">The paragraph.</param>
+        /// <returns>List of subsections.</returns>
         private IList<string> SubsectionParagraphs(string paragraph)
         {
             var paragraphs = new List<string>();

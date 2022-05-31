@@ -1,5 +1,8 @@
 ﻿namespace RedditTextToSpeech.Core
 {
+    /// <summary>
+    /// The audio image pair class.
+    /// </summary>
     public class AudioImagePair
     {
         /// <summary>

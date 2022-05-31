@@ -8,10 +8,24 @@ using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services
 {
+    /// <summary>
+    /// The FFMPEG video service.
+    /// </summary>
     public class FFMPEGService : IVideoService
     {
+        /// <summary>
+        /// Gets the file extension.
+        /// </summary>
         public string Extension => ".mp4";
 
+        /// <summary>
+        /// Gets the video.
+        /// </summary>
+        /// <param name="path">The file path.</param>
+        /// <param name="values">The audio image values.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="background">The background video.</param>
+        /// <returns>Awaitable task returning string.</returns>
         public async Task<string> GetVideo(string path, IList<AudioImagePair> values, TimeSpan startTime, string background)
         {
             await Task.Run(() =>
@@ -21,7 +35,7 @@ namespace RedditTextToSpeech.Logic.Services
                 var count = values.Count;
                 var tempPath = $"{Guid.NewGuid()}.wav";
 
-                WaveFileWriter writer = null;
+                WaveFileWriter? writer = null;
                 byte[] buffer = new byte[1024];
 
                 for (int i = 0; i < count; i++)
@@ -61,13 +75,18 @@ namespace RedditTextToSpeech.Logic.Services
                     time += durations[i];
                 }
 
-                this.GetProcessOutput($"-y -ss {startTime} -t {totalDuration} -i \"{background}\" -c:v copy -c:a copy output{this.Extension}");
-                this.GetProcessOutput($"-y -i output.mp4 {inputs} -i {tempPath} -vcodec libx265 -crf 30 -filter_complex \"[0:v]crop = ih*(1242/2688):ih[a];{overlays}\" -map {count + 1}:a -map \"[v{count - 1}]\" -tag:v hvc1 -preset fast -shortest \"{path}{this.Extension}\"");
+                this.RunFFMPEGProcess($"-y -ss {startTime} -t {totalDuration} -i \"{background}\" -c:v copy -c:a copy output{this.Extension}");
+                this.RunFFMPEGProcess($"-y -i output.mp4 {inputs} -i {tempPath} -vcodec libx265 -crf 30 -filter_complex \"[0:v]crop = ih*(1242/2688):ih[a];{overlays}\" -map {count + 1}:a -map \"[v{count - 1}]\" -tag:v hvc1 -preset fast -shortest \"{path}{this.Extension}\"");
             });
             return path;
         }
 
-        private string GetProcessOutput(string args)
+        /// <summary>
+        /// Builds and runs a process for FFMPEG.
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <returns>Output information.</returns>
+        private string RunFFMPEGProcess(string args)
         {
             var p = new Process();
             p.StartInfo.FileName = "ffmpeg";

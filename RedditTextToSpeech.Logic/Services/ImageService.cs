@@ -6,18 +6,37 @@ using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services
 {
+    /// <summary>
+    /// The image service.
+    /// </summary>
     public class ImageService : IImageService
     {
         private int maxWidth;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageService"/> class.
+        /// </summary>
+        /// <param name="maxWidth">The max width.</param>
         public ImageService(int maxWidth)
         {
             this.maxWidth = maxWidth;
         }
 
+        /// <summary>
+        /// Gets the file extension.
+        /// </summary>
         public string Extension => ".png";
 
-        public async Task<string> GetImage(string path, string title, string username, string subreddit, string avatar)
+        /// <summary>
+        /// Gets a image representing a reddit comment start.
+        /// </summary>
+        /// <param name="path">The image path to save to.</param>
+        /// <param name="text">The text to display.</param>
+        /// <param name="username">The username of the user.</param>
+        /// <param name="subreddit">The subreddit.</param>
+        /// <param name="avatar">Link to users avatar.</param>
+        /// <returns>Awaitable task returning string.</returns>
+        public async Task<string> GetImage(string path, string text, string username, string subreddit, string avatar)
         {
             await Task.Run(() =>
             {
@@ -27,10 +46,10 @@ namespace RedditTextToSpeech.Logic.Services
 
                 var tb = new TextureBrush(new Bitmap(avatar), WrapMode.Tile);
 
-                var bitmapHeight = (int)retBitmapGraphics.MeasureString(title, font, maxWidth).Height;
+                var bitmapHeight = (int)retBitmapGraphics.MeasureString(text, font, maxWidth).Height;
                 var usernameHeight = (int)retBitmapGraphics.MeasureString(username, topFont, maxWidth).Height;
 
-                var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + 35);
+                var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + usernameHeight + 5);
                 using var graphicsPath = this.CreatePath(rect, 15, true);
                 var retBitmap = new Bitmap(rect.Width, rect.Height);
                 retBitmap.MakeTransparent();
@@ -42,9 +61,9 @@ namespace RedditTextToSpeech.Logic.Services
 
                 retBitmapGraphics.FillEllipse(tb, new RectangleF(5, 5, 30, 30));
                 retBitmapGraphics.DrawString(username, topFont, new SolidBrush(Color.FromArgb(127, 159, 227)),
-                        new RectangleF(35, 5, maxWidth, usernameHeight));
-                retBitmapGraphics.DrawString(title, font, new SolidBrush(Color.FromArgb(215, 218, 220)),
-                    new RectangleF(5, 35, maxWidth, bitmapHeight));
+                        new RectangleF(5, 5, maxWidth, usernameHeight));
+                retBitmapGraphics.DrawString(text, font, new SolidBrush(Color.FromArgb(215, 218, 220)),
+                    new RectangleF(5, 5 + usernameHeight, maxWidth, bitmapHeight));
                 retBitmapGraphics.Flush();
 
                 retBitmap.Save(path + this.Extension, ImageFormat.Png);
@@ -52,6 +71,14 @@ namespace RedditTextToSpeech.Logic.Services
             return path + this.Extension;
         }
 
+        /// <summary>
+        /// Gets a image representing a reddit title.
+        /// </summary>
+        /// <param name="path">The image path to save to.</param>
+        /// <param name="title">The title of the post.</param>
+        /// <param name="username">The username of the user.</param>
+        /// <param name="subreddit">The subreddit.</param>
+        /// <returns>Awaitable task returning string.</returns>
         public async Task<string> GetImage(string path, string title, string username, string subreddit)
         {
             await Task.Run(() =>
@@ -87,6 +114,12 @@ namespace RedditTextToSpeech.Logic.Services
             return path + this.Extension;
         }
 
+        /// <summary>
+        /// Gets a blank text image.
+        /// </summary>
+        /// <param name="path">The image path to save to.</param>
+        /// <param name="text">The text to display.</param>
+        /// <returns>Awaitable task returning string.</returns>
         public async Task<string> GetImage(string path, string text)
         {
             await Task.Run(() =>
@@ -114,14 +147,21 @@ namespace RedditTextToSpeech.Logic.Services
             return path + this.Extension;
         }
 
-        private GraphicsPath CreatePath(Rectangle rect, int nRadius, bool bOutline)
+        /// <summary>
+        /// Creates a path.
+        /// </summary>
+        /// <param name="rect">The path rect representing size and location.</param>
+        /// <param name="radius">The corner radius.</param>
+        /// <param name="hasOutline">Should an outline be applied.</param>
+        /// <returns>Graph path instance.</returns>
+        private GraphicsPath CreatePath(Rectangle rect, int radius, bool hasOutline)
         {
-            int nShift = bOutline ? 1 : 0;
+            int nShift = hasOutline ? 1 : 0;
             var path = new GraphicsPath();
-            path.AddArc(rect.X + nShift, rect.Y, nRadius, nRadius, 180f, 90f);
-            path.AddArc((rect.Right - nRadius) - nShift, rect.Y, nRadius, nRadius, 270f, 90f);
-            path.AddArc((rect.Right - nRadius) - nShift, (rect.Bottom - nRadius) - nShift, nRadius, nRadius, 0f, 90f);
-            path.AddArc(rect.X + nShift, (rect.Bottom - nRadius) - nShift, nRadius, nRadius, 90f, 90f);
+            path.AddArc(rect.X + nShift, rect.Y, radius, radius, 180f, 90f);
+            path.AddArc((rect.Right - radius) - nShift, rect.Y, radius, radius, 270f, 90f);
+            path.AddArc((rect.Right - radius) - nShift, (rect.Bottom - radius) - nShift, radius, radius, 0f, 90f);
+            path.AddArc(rect.X + nShift, (rect.Bottom - radius) - nShift, radius, radius, 90f, 90f);
             path.CloseFigure();
             return path;
         }

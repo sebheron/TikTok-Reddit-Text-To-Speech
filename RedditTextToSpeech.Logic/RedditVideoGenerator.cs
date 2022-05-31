@@ -8,14 +8,24 @@ using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic
 {
+    /// <summary>
+    /// The reddit video generator.
+    /// </summary>
     public class RedditVideoGenerator
     {
-        private IAudioClipFactory audioClipFactory;
-        private IImageFactory imageFactory;
-        private IRedditService redditService;
-        private ISpeechSynthesisService speechSynthesisService;
-        private IVideoFactory videoFactory;
+        private readonly IAudioClipFactory audioClipFactory;
+        private readonly IImageFactory imageFactory;
+        private readonly IRedditService redditService;
+        private readonly ISpeechSynthesisService speechSynthesisService;
+        private readonly IVideoFactory videoFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RedditVideoGenerator"/> class.
+        /// </summary>
+        /// <param name="videoService">The video service.</param>
+        /// <param name="imageService">The image service.</param>
+        /// <param name="speechSynthesisService">The speech synthesis service.</param>
+        /// <param name="redditService">The reddit service.</param>
         public RedditVideoGenerator(IVideoService videoService,
             IImageService imageService,
             ISpeechSynthesisService speechSynthesisService,
@@ -31,6 +41,10 @@ namespace RedditTextToSpeech.Logic
         /// <summary>
         /// Generates a post video from a url.
         /// </summary>
+        /// <param name="url">The url of the reddit post.</param>
+        /// <param name="backgroundVideo">The background video.</param>
+        /// <param name="gender">The gender of the TTS voice.</param>
+        /// <param name="startTime">The starting time for the background video.</param>
         /// <returns>The path to the video produced.</returns>
         public async Task<string> GenerateVideo(string url, string backgroundVideo, Gender gender, TimeSpan startTime)
         {
@@ -72,7 +86,12 @@ namespace RedditTextToSpeech.Logic
         /// <summary>
         /// Generates a comment video from a url.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="url">The url of the reddit post.</param>
+        /// <param name="backgroundVideo">The background video.</param>
+        /// <param name="gender">The gender of the TTS voice.</param>
+        /// <param name="startTime">The starting time for the background video.</param>
+        /// <param name="commentsToHarvest">The number of comments to add to the video.</param>
+        /// <returns>The path to the video produced.</returns>
         public async Task<string> GenerateVideo(string url, string backgroundVideo, Gender gender, TimeSpan startTime, int commentsToHarvest)
         {
             try

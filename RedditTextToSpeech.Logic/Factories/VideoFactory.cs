@@ -6,15 +6,29 @@ using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Factories
 {
+    /// <summary>
+    /// The video factory.
+    /// </summary>
     internal class VideoFactory : IVideoFactory
     {
         private IVideoService videoService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VideoFactory"/> class.
+        /// </summary>
+        /// <param name="videoService">The video service.</param>
         public VideoFactory(IVideoService videoService)
         {
             this.videoService = videoService;
         }
 
+        /// <summary>
+        /// Gets the video.
+        /// </summary>
+        /// <param name="values">The audio image values.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="background">The background.</param>
+        /// <returns>Awaitable task returning string.</returns>
         public async Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background)
         {
             var path = Guid.NewGuid().ToString();

@@ -4,11 +4,19 @@ using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services
 {
+    /// <summary>
+    /// The azure authentication service.
+    /// </summary>
     public class AzureAuthenticationService : IAzureAuthenticationService
     {
         private string subscriptionKey;
         private string tokenFetchUri;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureAuthenticationService"/> class.
+        /// </summary>
+        /// <param name="tokenFetchUri">The token fetch uri.</param>
+        /// <param name="subscriptionKey">The subscription key.</param>
         public AzureAuthenticationService(string tokenFetchUri, string subscriptionKey)
         {
             if (string.IsNullOrWhiteSpace(tokenFetchUri))
@@ -23,6 +31,10 @@ namespace RedditTextToSpeech.Logic.Services
             this.subscriptionKey = subscriptionKey;
         }
 
+        /// <summary>
+        /// Fetches the token asynchronously.
+        /// </summary>
+        /// <returns>Awaitable task returning token.</returns>
         public async Task<string> FetchTokenAsync()
         {
             using (HttpClient client = new HttpClient())
