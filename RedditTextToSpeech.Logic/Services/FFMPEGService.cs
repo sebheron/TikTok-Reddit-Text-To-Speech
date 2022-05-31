@@ -3,6 +3,7 @@ using RedditTextToSpeech.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,8 +77,10 @@ namespace RedditTextToSpeech.Logic.Services
                     time += durations[i];
                 }
 
-                this.RunFFMPEGProcess($"-y -ss {startTime} -t {totalDuration} -i \"{background}\" -c:v copy -c:a copy output{this.Extension}");
-                this.RunFFMPEGProcess($"-y -i output.mp4 {inputs} -i {tempPath} -vcodec libx265 -crf 30 -filter_complex \"[0:v]crop = ih*(1242/2688):ih[a];{overlays}\" -map {count + 1}:a -map \"[v{count - 1}]\" -tag:v hvc1 -preset fast -shortest \"{path}{this.Extension}\"");
+                var tempFile = $"{Guid.NewGuid()}.mp4";
+                this.RunFFMPEGProcess($"-y -ss {startTime} -t {totalDuration} -i \"{background}\" -c:v copy -c:a copy {tempFile}");
+                this.RunFFMPEGProcess($"-y -i {tempFile} {inputs} -i {tempPath} -vcodec libx265 -crf 30 -filter_complex \"[0:v]crop = ih*(1242/2688):ih[a];{overlays}\" -map {count + 1}:a -map \"[v{count - 1}]\" -tag:v hvc1 -preset fast -shortest \"{path}\"");
+                File.Delete(tempFile);
             });
             return path;
         }
