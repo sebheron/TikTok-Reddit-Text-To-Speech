@@ -21,7 +21,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="subreddit">The subreddit.</param>
         /// <param name="avatar">Link to users avatar.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetImage(string path, string text, string username, string subreddit, string avatar);
+        Task<string> GetImage(string path, string text, string username);
 
         /// <summary>
         /// Gets a image representing a reddit title.
