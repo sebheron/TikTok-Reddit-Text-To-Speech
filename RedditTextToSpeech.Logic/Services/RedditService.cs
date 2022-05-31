@@ -39,40 +39,14 @@ namespace RedditTextToSpeech.Logic.Services
             return post;
         }
 
-        private Post ParsePost(JToken postData)
+        private string? DownloadImage(string url)
         {
-            var subreddit = postData.SelectToken("$.subreddit")?.Value<string>();
-            var username = postData.SelectToken("$.author")?.Value<string>();
-            var postTitle = postData.SelectToken("$.title")?.Value<string>();
-            var content = postData.SelectToken("$.selftext")?.Value<string>()?.Trim()
-                .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
-            var flair = postData.SelectToken("$.link_flair_text")?.Value<string>();
-
-            if (content == null) throw new Exception();
-            if (subreddit == null) throw new Exception();
-
-            return new Post(subreddit,
-                username,
-                postTitle,
-                this.GetParagraphs(content),
-                this.GetIconUrl(subreddit),
-                flair);
-        }
-
-        private Comment ParseComment(JToken commentData)
-        {
-            var username = commentData.SelectToken("$.author")?.Value<string>();
-            var content = commentData.SelectToken("$.body")?.Value<string>()?.Trim()
-                .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
-            var flair = commentData.SelectToken("$.author_flair_text")?.Value<string>();
-
-            if (username == null) throw new Exception();
-            if (content == null) throw new Exception();
-
-            return new Comment(this.GetAvatarUrl(username),
-                username,
-                this.GetParagraphs(content),
-                flair);
+            var path = $"{Guid.NewGuid()}.png";
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(new Uri(url.Split("?")[0]), path);
+            }
+            return path;
         }
 
         private string? GetAvatarUrl(string username)
@@ -93,14 +67,17 @@ namespace RedditTextToSpeech.Logic.Services
             return this.DownloadImage(about.SelectToken("$..icon_img")?.Value<string>());
         }
 
-        private string? DownloadImage(string url)
+        private string GetJsonStringFromURL(string url)
         {
-            var path = $"{Guid.NewGuid()}.png";
-            using (WebClient client = new WebClient())
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
             {
-                client.DownloadFile(new Uri(url.Split("?")[0]), path);
+                return reader.ReadToEnd();
             }
-            return path;
         }
 
         private IList<string> GetParagraphs(IEnumerable<string> content)
@@ -111,6 +88,42 @@ namespace RedditTextToSpeech.Logic.Services
                 displayParagraphs.AddRange(this.SubsectionParagraphs(paragraph.Trim()));
             }
             return displayParagraphs;
+        }
+
+        private Comment ParseComment(JToken commentData)
+        {
+            var username = commentData.SelectToken("$.author")?.Value<string>();
+            var content = commentData.SelectToken("$.body")?.Value<string>()?.Trim()
+                .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
+            var flair = commentData.SelectToken("$.author_flair_text")?.Value<string>();
+
+            if (username == null) throw new Exception();
+            if (content == null) throw new Exception();
+
+            return new Comment(this.GetAvatarUrl(username),
+                username,
+                this.GetParagraphs(content),
+                flair);
+        }
+
+        private Post ParsePost(JToken postData)
+        {
+            var subreddit = postData.SelectToken("$.subreddit")?.Value<string>();
+            var username = postData.SelectToken("$.author")?.Value<string>();
+            var postTitle = postData.SelectToken("$.title")?.Value<string>();
+            var content = postData.SelectToken("$.selftext")?.Value<string>()?.Trim()
+                .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
+            var flair = postData.SelectToken("$.link_flair_text")?.Value<string>();
+
+            if (content == null) throw new Exception();
+            if (subreddit == null) throw new Exception();
+
+            return new Post(subreddit,
+                username,
+                postTitle,
+                this.GetParagraphs(content),
+                this.GetIconUrl(subreddit),
+                flair);
         }
 
         private IList<string> SubsectionParagraphs(string paragraph)
@@ -129,7 +142,7 @@ namespace RedditTextToSpeech.Logic.Services
                     if (sb.Length + sentence.Length + 1 > 350) break;
                     sb.Append(sentence + ".");
                 }
-                
+
                 if (!Regex.IsMatch(paragraph, "[Tt][Ll]([;:]?)[Dd][Rr]"))
                 {
                     paragraphs.Add(sb.ToString().Trim());
@@ -142,20 +155,6 @@ namespace RedditTextToSpeech.Logic.Services
                 paragraphs.Add(paragraph.Trim());
             }
             return paragraphs;
-        }
-
-
-        private string GetJsonStringFromURL(string url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
         }
     }
 }

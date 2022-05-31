@@ -15,12 +15,12 @@ namespace RedditTextToSpeech.Core
             this.Flair = flair;
         }
 
-        public string? Subreddit { get; }
-        public string? Username { get; }
-        public string? Title { get; }
-        public IList<string>? Content { get; }
-        public string? Image { get; }
-        public string? Flair { get; }
         public IList<Comment> Comments { get; }
+        public IList<string>? Content { get; }
+        public string? Flair { get; }
+        public string? Image { get; }
+        public string? Subreddit { get; }
+        public string? Title { get; }
+        public string? Username { get; }
     }
 }

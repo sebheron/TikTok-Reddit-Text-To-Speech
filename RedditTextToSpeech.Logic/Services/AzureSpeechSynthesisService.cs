@@ -9,28 +9,15 @@ namespace RedditTextToSpeech.Logic.Services
 {
     public class AzureSpeechSynthesisService : ISpeechSynthesisService
     {
-        private IAzureAuthenticationService auth;
         private string? accessToken;
+        private IAzureAuthenticationService auth;
 
         public AzureSpeechSynthesisService(string server, string key)
         {
             this.auth = new AzureAuthenticationService($"https://{server}.api.cognitive.microsoft.com/sts/v1.0/issuetoken", key);
         }
 
-        public string[] MaleVoices => new string[]
-        {
-            "en-AU-WilliamNeural",
-            "en-CA-LiamNeural",
-            "en-IE-ConnorNeural",
-            "en-NZ-MitchellNeural",
-            "en-GB-RyanNeural",
-            "en-US-BrandonNeural",
-            "en-US-ChristopherNeural",
-            "en-US-EricNeural",
-            "en-US-GuyNeural",
-            "en-US-JacobNeural",
-            "en-GB-AlfieNeural"
-        };
+        public string Extension => ".wav";
 
         public string[] FemaleVoices => new string[] {
             "en-IE-EmilyNeural",
@@ -50,7 +37,20 @@ namespace RedditTextToSpeech.Logic.Services
             "en-CA-ClaraNeural"
         };
 
-        public string Extension => ".wav";
+        public string[] MaleVoices => new string[]
+                        {
+            "en-AU-WilliamNeural",
+            "en-CA-LiamNeural",
+            "en-IE-ConnorNeural",
+            "en-NZ-MitchellNeural",
+            "en-GB-RyanNeural",
+            "en-US-BrandonNeural",
+            "en-US-ChristopherNeural",
+            "en-US-EricNeural",
+            "en-US-GuyNeural",
+            "en-US-JacobNeural",
+            "en-GB-AlfieNeural"
+        };
 
         public async Task<string> GetSound(string path, string voice, string text)
         {

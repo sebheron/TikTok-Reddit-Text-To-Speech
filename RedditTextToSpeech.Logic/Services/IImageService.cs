@@ -4,6 +4,8 @@ namespace RedditTextToSpeech.Logic.Services
 {
     public interface IImageService
     {
+        string Extension { get; }
+
         Task<string> GetImage(string path, string title, string username, string subreddit, string avatar);
 
         /// <summary>
@@ -15,9 +17,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="subreddit"></param>
         /// <returns></returns>
         Task<string> GetImage(string path, string title, string username, string subreddit);
-        
-        Task<string> GetImage(string path, string text);
 
-        string Extension { get; }
+        Task<string> GetImage(string path, string text);
     }
 }

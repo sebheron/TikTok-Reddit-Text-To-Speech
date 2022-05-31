@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core;
 
 namespace RedditTextToSpeech.Logic.Services
 {

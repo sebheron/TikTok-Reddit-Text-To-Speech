@@ -1,6 +1,6 @@
-﻿using RedditTextToSpeech.Logic;
+﻿using RedditTextToSpeech.Core;
+using RedditTextToSpeech.Logic;
 using RedditTextToSpeech.Logic.Services;
-using RedditTextToSpeech.Core;
 
 var imageService = new ImageService(400);
 var videoService = new FFMPEGService();

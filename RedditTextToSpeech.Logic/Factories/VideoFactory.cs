@@ -9,6 +9,7 @@ namespace RedditTextToSpeech.Logic.Factories
     internal class VideoFactory : IVideoFactory
     {
         private IVideoService videoService;
+
         public VideoFactory(IVideoService videoService)
         {
             this.videoService = videoService;

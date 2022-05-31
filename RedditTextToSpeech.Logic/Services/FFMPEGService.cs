@@ -1,10 +1,10 @@
-﻿using RedditTextToSpeech.Core;
+﻿using NAudio.Wave;
+using RedditTextToSpeech.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
-using NAudio.Wave;
-using System.Diagnostics;
 
 namespace RedditTextToSpeech.Logic.Services
 {

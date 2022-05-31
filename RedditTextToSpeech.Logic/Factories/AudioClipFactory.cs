@@ -1,5 +1,4 @@
-﻿using RedditTextToSpeech.Core;
-using RedditTextToSpeech.Logic.Services;
+﻿using RedditTextToSpeech.Logic.Services;
 using System;
 using System.Threading.Tasks;
 

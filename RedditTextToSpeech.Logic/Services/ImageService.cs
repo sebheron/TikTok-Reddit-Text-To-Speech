@@ -2,7 +2,6 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services

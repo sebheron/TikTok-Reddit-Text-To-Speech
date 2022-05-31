@@ -1,6 +1,4 @@
-﻿using RedditTextToSpeech.Core;
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Factories
 {

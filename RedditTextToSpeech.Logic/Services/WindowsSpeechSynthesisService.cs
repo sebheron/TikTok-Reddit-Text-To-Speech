@@ -17,13 +17,13 @@ namespace RedditTextToSpeech.Logic.Services
 
         public string Extension => ".wav";
 
-        public string[] MaleVoices { get; }
-
         public string[] FemaleVoices { get; }
+        public string[] MaleVoices { get; }
 
         public async Task<string> GetSound(string path, string voice, string text)
         {
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 using var synthesizer = this.GetSynth();
                 synthesizer.SetOutputToWaveFile(path + this.Extension,
                   new SpeechAudioFormatInfo(32000, AudioBitsPerSample.Sixteen, AudioChannel.Mono));

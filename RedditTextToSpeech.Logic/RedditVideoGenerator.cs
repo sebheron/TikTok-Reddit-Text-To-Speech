@@ -10,11 +10,11 @@ namespace RedditTextToSpeech.Logic
 {
     public class RedditVideoGenerator
     {
-        private IVideoFactory videoFactory;
-        private IImageFactory imageFactory;
         private IAudioClipFactory audioClipFactory;
-        private ISpeechSynthesisService speechSynthesisService;
+        private IImageFactory imageFactory;
         private IRedditService redditService;
+        private ISpeechSynthesisService speechSynthesisService;
+        private IVideoFactory videoFactory;
 
         public RedditVideoGenerator(IVideoService videoService,
             IImageService imageService,
