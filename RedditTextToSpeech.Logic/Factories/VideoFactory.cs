@@ -2,6 +2,7 @@
 using RedditTextToSpeech.Logic.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Factories
@@ -11,7 +12,7 @@ namespace RedditTextToSpeech.Logic.Factories
     /// </summary>
     internal class VideoFactory : IVideoFactory
     {
-        private IVideoService videoService;
+        private readonly IVideoService videoService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VideoFactory"/> class.
@@ -29,11 +30,10 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="startTime">The start time.</param>
         /// <param name="background">The background.</param>
         /// <returns>Awaitable task returning path.</returns>
-        public async Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background)
+        public async Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background, string output)
         {
-            var path = Guid.NewGuid().ToString();
-            var file = await this.videoService.GetVideo(path, values, startTime, background);
-            return file;
+            var path = Path.Combine(output, $"{Guid.NewGuid()}{this.videoService.Extension}");
+            return await this.videoService.GetVideo(path, values, startTime, background);
         }
     }
 }

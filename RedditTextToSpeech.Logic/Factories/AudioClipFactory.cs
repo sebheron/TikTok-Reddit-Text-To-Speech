@@ -28,9 +28,8 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetAudioClip(string text, string voice)
         {
-            var path = Guid.NewGuid().ToString();
-            var file = await this.synthesisService.GetSound(path, voice, text);
-            return file;
+            var path = $"{Guid.NewGuid()}{this.synthesisService.Extension}";
+            return await this.synthesisService.GetSound(path, voice, text);
         }
     }
 }

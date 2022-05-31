@@ -9,7 +9,7 @@ namespace RedditTextToSpeech.Logic.Factories
     /// </summary>
     public class ImageFactory : IImageFactory
     {
-        private IImageService imageService;
+        private readonly IImageService imageService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageFactory"/> class.
@@ -28,11 +28,10 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="subreddit">Subreddit to display.</param>
         /// <param name="avatar">The link to the saved avatar.</param>
         /// <returns>Awaitable task returning path.</returns>
-        public async Task<string> GetImage(string text, string username, string subreddit, string avatar)
+        public async Task<string> GetImage(string text, string username)
         {
-            var path = Guid.NewGuid().ToString();
-            var file = await this.imageService.GetImage(path, text, username, subreddit, avatar);
-            return file;
+            var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
+            return await this.imageService.GetImage(path, text, username);
         }
 
         /// <summary>
@@ -44,9 +43,8 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetImage(string title, string username, string subreddit)
         {
-            var path = Guid.NewGuid().ToString();
-            var file = await this.imageService.GetImage(path, title, username, subreddit);
-            return file;
+            var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
+            return await this.imageService.GetImage(path, title, username, subreddit);
         }
 
         /// <summary>
@@ -56,9 +54,8 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <returns>Awaitable task returning path.</returns>
         public async Task<string> GetImage(string text)
         {
-            var path = Guid.NewGuid().ToString();
-            var file = await this.imageService.GetImage(path, text);
-            return file;
+            var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
+            return await this.imageService.GetImage(path, text);
         }
     }
 }
