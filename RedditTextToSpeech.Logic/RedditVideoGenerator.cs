@@ -45,18 +45,19 @@ namespace RedditTextToSpeech.Logic
         /// </summary>
         /// <param name="url">The url of the reddit post.</param>
         /// <param name="backgroundVideo">The background video.</param>
+        /// <param name="output">The output location.</param>
         /// <param name="gender">The gender of the TTS voice.</param>
         /// <param name="startTime">The starting time for the background video.</param>
         /// <returns>The path to the video produced.</returns>
-        public async Task<string> GenerateVideo(string url, string backgroundVideo, Gender gender, TimeSpan startTime)
+        public async Task<string> GenerateVideo(string url, string backgroundVideo, string output, Gender gender, TimeSpan startTime)
         {
+            var values = new List<AudioImagePair>();
             try
             {
                 var post = this.redditService.GetPostInformation(url);
                 var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
                 var voice = voices[new Random().Next(voices.Length)];
 
-                var values = new List<AudioImagePair>();
                 var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
                 values.Add(new AudioImagePair(audio, image));
@@ -68,9 +69,8 @@ namespace RedditTextToSpeech.Logic
                     values.Add(new AudioImagePair(contentAudio, contentImage));
                 }
 
-                var video = await this.videoFactory.GetVideo(values, startTime, backgroundVideo);
+                var video = await this.videoFactory.GetVideo(values, startTime, backgroundVideo, output);
 
-                File.Delete("output.mp4");
                 foreach (var value in values)
                 {
                     File.Delete(value.ImagePath);
@@ -81,6 +81,11 @@ namespace RedditTextToSpeech.Logic
             }
             catch (Exception e)
             {
+                foreach (var value in values)
+                {
+                    File.Delete(value.ImagePath);
+                    File.Delete(value.AudioPath);
+                }
                 throw new Exception("Reddit Video Generator error. See inner exception for details.", e);
             }
         }
@@ -90,26 +95,27 @@ namespace RedditTextToSpeech.Logic
         /// </summary>
         /// <param name="url">The url of the reddit post.</param>
         /// <param name="backgroundVideo">The background video.</param>
+        /// <param name="output">The output location.</param>
         /// <param name="gender">The gender of the TTS voice.</param>
         /// <param name="startTime">The starting time for the background video.</param>
         /// <param name="commentsToHarvest">The number of comments to add to the video.</param>
         /// <returns>The path to the video produced.</returns>
-        public async Task<string> GenerateVideo(string url, string backgroundVideo, Gender gender, TimeSpan startTime, int commentsToHarvest)
+        public async Task<string> GenerateVideo(string url, string backgroundVideo, string output, Gender gender, TimeSpan startTime, int commentsToHarvest)
         {
+            var values = new List<AudioImagePair>();
             try
             {
                 var post = this.redditService.GetPostInformation(url, commentsToHarvest);
                 var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
                 var voice = voices[new Random().Next(voices.Length)];
 
-                var values = new List<AudioImagePair>();
                 var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
                 values.Add(new AudioImagePair(audio, image));
 
                 foreach (var comment in post.Comments)
                 {
-                    var contentImage = await this.imageFactory.GetImage(comment.Content[0], comment.Username, post.Subreddit, comment.Image);
+                    var contentImage = await this.imageFactory.GetImage(comment.Content[0], comment.Username);
                     var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice);
                     values.Add(new AudioImagePair(contentAudio, contentImage));
                     for (int i = 1; i < comment.Content.Count; i++)
@@ -120,9 +126,8 @@ namespace RedditTextToSpeech.Logic
                     }
                 }
 
-                var video = await this.videoFactory.GetVideo(values, startTime, backgroundVideo);
+                var video = await this.videoFactory.GetVideo(values, startTime, backgroundVideo, output);
 
-                File.Delete("output.mp4");
                 foreach (var value in values)
                 {
                     File.Delete(value.ImagePath);
@@ -133,6 +138,11 @@ namespace RedditTextToSpeech.Logic
             }
             catch (Exception e)
             {
+                foreach (var value in values)
+                {
+                    File.Delete(value.ImagePath);
+                    File.Delete(value.AudioPath);
+                }
                 throw new Exception("Reddit Video Generator error. See inner exception for details.", e);
             }
         }
