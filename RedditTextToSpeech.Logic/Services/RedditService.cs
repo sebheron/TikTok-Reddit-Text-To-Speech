@@ -143,7 +143,7 @@ namespace RedditTextToSpeech.Logic.Services
             var postTitle = postData.SelectToken("$.title")?.Value<string>();
             var content = postData.SelectToken("$.selftext")?.Value<string>()?.Trim()
                 .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
-            var flair = postData.SelectToken("$.link_flair_text")?.Value<string>();
+            var flair = postData.SelectToken("$.link_flair_text")?.Value<string>() ?? "";
 
             if (content == null || subreddit == null || username == null || postTitle == null || flair == null) throw new NullReferenceException();
 
