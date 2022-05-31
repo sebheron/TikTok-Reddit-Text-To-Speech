@@ -17,6 +17,6 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="startTime">The start time.</param>
         /// <param name="background">The background.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background);
+        Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background, string output);
     }
 }

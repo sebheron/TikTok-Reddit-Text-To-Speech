@@ -15,7 +15,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="subreddit">Subreddit to display.</param>
         /// <param name="avatar">The link to the saved avatar.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetImage(string text, string username, string subreddit, string avatar);
+        Task<string> GetImage(string text, string username);
 
         /// <summary>
         /// Gets the image.
