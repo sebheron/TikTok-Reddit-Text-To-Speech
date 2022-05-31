@@ -3,7 +3,9 @@
 namespace RedditTextToSpeech.Core
 {
     /// <summary>
-    /// The comment.
+    /// Class which contains specific comment information retrieved from reddit.
+    /// The comment class exists as a child of the post class.
+    /// If information is not available it will be blank.
     /// </summary>
     public class Comment
     {
@@ -26,14 +28,17 @@ namespace RedditTextToSpeech.Core
         /// Gets the content.
         /// </summary>
         public IList<string> Content { get; }
+
         /// <summary>
         /// Gets the flair.
         /// </summary>
         public string Flair { get; }
+
         /// <summary>
         /// Gets the image.
         /// </summary>
         public string Image { get; }
+
         /// <summary>
         /// Gets the username.
         /// </summary>

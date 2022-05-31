@@ -10,12 +10,12 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <summary>
         /// Gets the image.
         /// </summary>
-        /// <param name="title">The display title.</param>
+        /// <param name="text">The display text.</param>
         /// <param name="username">Username to display.</param>
         /// <param name="subreddit">Subreddit to display.</param>
         /// <param name="avatar">The link to the saved avatar.</param>
         /// <returns>Awaitable task returning string.</returns>
-        Task<string> GetImage(string title, string username, string subreddit, string avatar);
+        Task<string> GetImage(string text, string username, string subreddit, string avatar);
 
         /// <summary>
         /// Gets the image.

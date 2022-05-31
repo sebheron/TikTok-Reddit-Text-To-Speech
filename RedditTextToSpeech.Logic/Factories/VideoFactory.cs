@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RedditTextToSpeech.Logic.Factories
 {
     /// <summary>
-    /// The video factory.
+    /// The video factory used for creating videos.
     /// </summary>
     internal class VideoFactory : IVideoFactory
     {

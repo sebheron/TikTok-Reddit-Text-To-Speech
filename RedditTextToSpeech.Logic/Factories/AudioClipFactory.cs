@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace RedditTextToSpeech.Logic.Factories
 {
     /// <summary>
-    /// The audio clip factory.
+    /// The audio clip factory used for creating audio clips.
     /// </summary>
     public class AudioClipFactory : IAudioClipFactory
     {

@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace RedditTextToSpeech.Logic.Services
 {
     /// <summary>
-    /// The FFMPEG video service.
+    /// The FFMPEG video service, produces a video using some predefined attributes.
+    /// Requires FFMPEG to be installed to the PATH (or included in the same directory as this application) for usage.
     /// </summary>
     public class FFMPEGService : IVideoService
     {

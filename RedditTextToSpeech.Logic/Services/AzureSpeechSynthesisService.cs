@@ -7,18 +7,33 @@ using System.Xml.Linq;
 
 namespace RedditTextToSpeech.Logic.Services
 {
+    /// <summary>
+    /// The azure speech synthesis service.
+    /// Produces better quality TTS.
+    /// </summary>
     public class AzureSpeechSynthesisService : ISpeechSynthesisService
     {
         private string? accessToken;
         private IAzureAuthenticationService auth;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AzureSpeechSynthesisService"/> class.
+        /// </summary>
+        /// <param name="server">The server (i.e. westeurope).</param>
+        /// <param name="key">The subscription key (from Azure).</param>
         public AzureSpeechSynthesisService(string server, string key)
         {
             this.auth = new AzureAuthenticationService($"https://{server}.api.cognitive.microsoft.com/sts/v1.0/issuetoken", key);
         }
 
+        /// <summary>
+        /// Gets the file extension.
+        /// </summary>
         public string Extension => ".wav";
 
+        /// <summary>
+        /// Gets the female voices.
+        /// </summary>
         public string[] FemaleVoices => new string[] {
             "en-IE-EmilyNeural",
             "en-NZ-MollyNeural",
@@ -37,6 +52,9 @@ namespace RedditTextToSpeech.Logic.Services
             "en-CA-ClaraNeural"
         };
 
+        /// <summary>
+        /// Gets the male voices.
+        /// </summary>
         public string[] MaleVoices => new string[]
                         {
             "en-AU-WilliamNeural",
@@ -52,6 +70,13 @@ namespace RedditTextToSpeech.Logic.Services
             "en-GB-AlfieNeural"
         };
 
+        /// <summary>
+        /// Gets the sound.
+        /// </summary>
+        /// <param name="path">The file path.</param>
+        /// <param name="voice">The voice to use.</param>
+        /// <param name="text">The text.</param>
+        /// <returns>Awaitable task returning string.</returns>
         public async Task<string> GetSound(string path, string voice, string text)
         {
             var body = new XDocument(

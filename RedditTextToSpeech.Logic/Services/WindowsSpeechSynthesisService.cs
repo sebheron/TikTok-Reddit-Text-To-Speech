@@ -7,6 +7,7 @@ namespace RedditTextToSpeech.Logic.Services
 {
     /// <summary>
     /// The windows speech synthesis service.
+    /// Uses the built-in windows TTS.
     /// </summary>
     public class WindowsSpeechSynthesisService : ISpeechSynthesisService
     {

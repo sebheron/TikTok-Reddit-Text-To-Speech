@@ -1,7 +1,8 @@
 ﻿namespace RedditTextToSpeech.Core
 {
     /// <summary>
-    /// Gender for voice selection.
+    /// Gender which is used to select a voice.
+    /// Voice selection is completely random in the current version.
     /// </summary>
     public enum Gender
     {

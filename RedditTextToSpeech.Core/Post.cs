@@ -3,7 +3,8 @@
 namespace RedditTextToSpeech.Core
 {
     /// <summary>
-    /// The post class.
+    /// Class which contains specific post information retrieved from reddit.
+    /// If information is not available it will be blank.
     /// </summary>
     public class Post
     {
@@ -31,26 +32,32 @@ namespace RedditTextToSpeech.Core
         /// Gets the comments for the post.
         /// </summary>
         public IList<Comment> Comments { get; }
+
         /// <summary>
         /// Gets the content.
         /// </summary>
         public IList<string> Content { get; }
+
         /// <summary>
         /// Gets the flair.
         /// </summary>
         public string Flair { get; }
+
         /// <summary>
         /// Gets the image.
         /// </summary>
         public string Image { get; }
+
         /// <summary>
         /// Gets the subreddit.
         /// </summary>
         public string Subreddit { get; }
+
         /// <summary>
         /// Gets the title.
         /// </summary>
         public string Title { get; }
+
         /// <summary>
         /// Gets the username.
         /// </summary>

@@ -10,6 +10,8 @@ namespace RedditTextToSpeech.Logic
 {
     /// <summary>
     /// The reddit video generator.
+    /// Requires services to be specified.
+    /// Some built-in ones exist, however custom implementations can be provided by implementing the interfaces.
     /// </summary>
     public class RedditVideoGenerator
     {

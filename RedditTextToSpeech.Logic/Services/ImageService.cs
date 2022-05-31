@@ -8,6 +8,7 @@ namespace RedditTextToSpeech.Logic.Services
 {
     /// <summary>
     /// The image service.
+    /// Builds simple images which are used to represent different parts of a reddit post.
     /// </summary>
     public class ImageService : IImageService
     {

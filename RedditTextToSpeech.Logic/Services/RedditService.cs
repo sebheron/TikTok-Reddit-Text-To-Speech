@@ -12,6 +12,7 @@ namespace RedditTextToSpeech.Logic.Services
 {
     /// <summary>
     /// The reddit service.
+    /// Connects to reddit.com and retrieves basic information about posts and comments.
     /// </summary>
     public class RedditService : IRedditService
     {
@@ -93,8 +94,8 @@ namespace RedditTextToSpeech.Logic.Services
         }
 
         /// <summary>
-        /// Gets the display paragraphs.
-        /// Display paragraphs are limited to a length to show less text on screen.
+        /// Gets the display paragraphs. Display paragraphs are limited to a length to show less
+        /// text on screen.
         /// </summary>
         /// <param name="content">The content.</param>
         /// <returns>Sensible partitions of paragraphs.</returns>

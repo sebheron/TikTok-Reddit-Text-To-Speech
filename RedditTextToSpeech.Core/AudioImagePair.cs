@@ -1,7 +1,8 @@
 ﻿namespace RedditTextToSpeech.Core
 {
     /// <summary>
-    /// The audio image pair class.
+    /// Class used to contain both an image path and an audio path.
+    /// Instances of this class are used to store this information for video creation.
     /// </summary>
     public class AudioImagePair
     {

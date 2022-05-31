@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace RedditTextToSpeech.Logic.Services
 {
     /// <summary>
-    /// The azure authentication service.
+    /// The azure authentication service used by the Azure speech synthesis service.
     /// </summary>
     public class AzureAuthenticationService : IAzureAuthenticationService
     {
