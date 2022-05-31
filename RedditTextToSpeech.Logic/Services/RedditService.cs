@@ -27,11 +27,11 @@ namespace RedditTextToSpeech.Logic.Services
             if (array.Count <= 1) return post;
 
             //Parse comments details.
-            var comments = array[1]?.SelectTokens("$..children").ToArray();
+            var comments = array[1]?.SelectTokens("$..children[?(@.kind == 't1')]").ToArray();
             if (comments == null) throw new NullReferenceException("Comments are null");
             for (int i = 0; i < commentCount && i < comments.Length; i++)
             {
-                var commentData = comments[i]?.SelectToken("$..data");
+                var commentData = comments[i].SelectToken("$.data");
                 if (commentData == null) throw new NullReferenceException("Comment is null");
                 post.Comments.Add(this.ParseComment(commentData));
             }
@@ -81,7 +81,7 @@ namespace RedditTextToSpeech.Logic.Services
             {
                 var json = this.GetJsonStringFromURL($"https://www.reddit.com/user/{username}/about.json");
                 var about = JObject.Parse(json);
-                return about.SelectToken("$..icon_img")?.Value<string>();
+                return this.DownloadImage(about.SelectTokens("$..icon_img")?.First()?.Value<string>());
             }
             return null;
         }
@@ -90,7 +90,17 @@ namespace RedditTextToSpeech.Logic.Services
         {
             var json = this.GetJsonStringFromURL($"https://www.reddit.com/r/{subreddit}/about.json");
             var about = JObject.Parse(json);
-            return about.SelectToken("$..icon_img")?.Value<string>();
+            return this.DownloadImage(about.SelectToken("$..icon_img")?.Value<string>());
+        }
+
+        private string? DownloadImage(string url)
+        {
+            var path = $"{Guid.NewGuid()}.png";
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(new Uri(url.Split("?")[0]), path);
+            }
+            return path;
         }
 
         private IList<string> GetParagraphs(IEnumerable<string> content)

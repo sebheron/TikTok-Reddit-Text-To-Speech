@@ -9,5 +9,5 @@ var speechService = new WindowsSpeechSynthesisService();
 
 var videoGenerator = new RedditVideoGenerator(videoService, imageService, speechService, redditService);
 
-await videoGenerator.GenerateVideo("https://www.reddit.com/r/AmItheAsshole/comments/v0yazc/aita_for_refusing_to_give_my_husband_my_new_wifi/",
-    "C:/Users/Sebhe/Downloads/input.mp4", Gender.Male, TimeSpan.Zero);
+await videoGenerator.GenerateVideo("https://www.reddit.com/r/AskReddit/comments/v0r9qs/what_are_we_living_in_the_golden_age_of/",
+    "C:/Users/Sebhe/Downloads/input.mp4", Gender.Male, TimeSpan.Zero, 3);

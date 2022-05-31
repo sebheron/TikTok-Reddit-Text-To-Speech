@@ -31,7 +31,6 @@ namespace RedditTextToSpeech.Logic
         /// <summary>
         /// Generates a post video from a url.
         /// </summary>
-        /// <param name="url">The reddit url.</param>
         /// <returns>The path to the video produced.</returns>
         public async Task<string> GenerateVideo(string url, string backgroundVideo, Gender gender, TimeSpan startTime)
         {
@@ -70,14 +69,51 @@ namespace RedditTextToSpeech.Logic
             }
         }
 
-        ///// <summary>
-        ///// Generates a comment video from a url.
-        ///// </summary>
-        ///// <param name="url"></param>
-        ///// <returns></returns>
-        //public async Task<string> GenerateVideo(string url, int commentsToHarvest)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        /// <summary>
+        /// Generates a comment video from a url.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> GenerateVideo(string url, string backgroundVideo, Gender gender, TimeSpan startTime, int commentsToHarvest)
+        {
+            try
+            {
+                var post = this.redditService.GetPostInformation(url, commentsToHarvest);
+                var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
+                var voice = voices[new Random().Next(voices.Length)];
+
+                var values = new List<AudioImagePair>();
+                var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
+                var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
+                values.Add(new AudioImagePair(audio, image));
+
+                foreach (var comment in post.Comments)
+                {
+                    var contentImage = await this.imageFactory.GetImage(comment.Content[0], comment.Username, post.Subreddit, comment.Image);
+                    var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice);
+                    values.Add(new AudioImagePair(contentAudio, contentImage));
+                    for (int i = 1; i < comment.Content.Count; i++)
+                    {
+                        var commentImage = await this.imageFactory.GetImage(comment.Content[i]);
+                        var commentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[i], voice);
+                        values.Add(new AudioImagePair(commentAudio, commentImage));
+                    }
+                }
+
+                var video = await this.videoFactory.GetVideo(values, startTime, backgroundVideo);
+
+                File.Delete("output.mp4");
+                foreach (var value in values)
+                {
+                    File.Delete(value.ImagePath);
+                    File.Delete(value.AudioPath);
+                }
+
+                return video;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Reddit Video Generator error. See inner exception for details.", e);
+            }
+        }
     }
 }
