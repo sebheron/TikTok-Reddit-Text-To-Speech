@@ -35,15 +35,16 @@ namespace RedditTextToSpeech.Logic.Services
                 var durations = new List<TimeSpan>();
                 var totalDuration = TimeSpan.Zero;
                 var count = values.Count;
-                var tempPath = $"{Guid.NewGuid()}.wav";
+                var tempAudio = $"{Guid.NewGuid()}.wav";
+                var tempVideo = $"{Guid.NewGuid()}.mp4";
 
-                WaveFileWriter? writer = null;
+                WaveFileWriter ? writer = null;
                 byte[] buffer = new byte[1024];
 
                 for (int i = 0; i < count; i++)
                 {
                     var reader = new WaveFileReader(values[i].AudioPath);
-                    if (writer == null) writer = new WaveFileWriter(tempPath, reader.WaveFormat);
+                    if (writer == null) writer = new WaveFileWriter(tempAudio, reader.WaveFormat);
                     int read;
                     while ((read = reader.Read(buffer, 0, buffer.Length)) > 0)
                     {
@@ -77,10 +78,10 @@ namespace RedditTextToSpeech.Logic.Services
                     time += durations[i];
                 }
 
-                var tempFile = $"{Guid.NewGuid()}.mp4";
-                this.RunFFMPEGProcess($"-y -ss {startTime} -t {totalDuration} -i \"{background}\" -c:v copy -c:a copy {tempFile}");
-                this.RunFFMPEGProcess($"-y -i {tempFile} {inputs} -i {tempPath} -vcodec libx265 -crf 30 -filter_complex \"[0:v]crop = ih*(1242/2688):ih[a];{overlays}\" -map {count + 1}:a -map \"[v{count - 1}]\" -tag:v hvc1 -preset fast -shortest \"{path}\"");
-                File.Delete(tempFile);
+                this.RunFFMPEGProcess($"-y -ss {startTime} -t {totalDuration} -i \"{background}\" -c:v copy -c:a copy {tempVideo}");
+                this.RunFFMPEGProcess($"-y -i {tempVideo} {inputs} -i {tempAudio} -vcodec libx265 -crf 30 -filter_complex \"[0:v]crop = ih*(1242/2688):ih[a];{overlays}\" -map {count + 1}:a -map \"[v{count - 1}]\" -tag:v hvc1 -preset fast -shortest \"{path}\"");
+                File.Delete(tempVideo);
+                File.Delete(tempAudio);
             });
             return path;
         }

@@ -120,9 +120,9 @@ namespace RedditTextToSpeech.Logic.Services
             var username = commentData.SelectToken("$.author")?.Value<string>();
             var content = commentData.SelectToken("$.body")?.Value<string>()?.Trim()
                 .Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
-            var flair = commentData.SelectToken("$.author_flair_text")?.Value<string>();
+            var flair = commentData.SelectToken("$.author_flair_text")?.Value<string>() ?? String.Empty;
 
-            if (username == null || content == null || flair == null) throw new NullReferenceException();
+            if (username == null || content == null) throw new NullReferenceException();
 
             return new Comment(this.GetAvatarUrl(username),
                 username,
