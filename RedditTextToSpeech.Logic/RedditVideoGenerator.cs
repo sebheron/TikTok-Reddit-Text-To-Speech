@@ -100,14 +100,13 @@ namespace RedditTextToSpeech.Logic
         /// <param name="startTime">The starting time for the background video.</param>
         /// <param name="commentsToHarvest">The number of comments to add to the video.</param>
         /// <returns>The path to the video produced.</returns>
-        public async Task<string> GenerateVideo(string url, string backgroundVideo, string output, Gender gender, TimeSpan startTime, int commentsToHarvest)
+        public async Task<string> GenerateVideo(string url, string backgroundVideo, string output, Gender gender, TimeSpan startTime, int commentsToHarvest, bool alternateVoice)
         {
             var values = new List<AudioImagePair>();
             try
             {
                 var post = this.redditService.GetPostInformation(url, commentsToHarvest);
-                var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
-                var voice = voices[new Random().Next(voices.Length)];
+                var voice = this.GetVoice(gender);
 
                 var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
@@ -123,6 +122,10 @@ namespace RedditTextToSpeech.Logic
                         var commentImage = await this.imageFactory.GetImage(comment.Content[i]);
                         var commentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[i], voice);
                         values.Add(new AudioImagePair(commentAudio, commentImage));
+                    }
+                    if (alternateVoice)
+                    {
+                        voice = this.GetVoice(gender);
                     }
                 }
 
@@ -145,6 +148,17 @@ namespace RedditTextToSpeech.Logic
                 }
                 throw new Exception("Reddit Video Generator error. See inner exception for details.", e);
             }
+        }
+
+        /// <summary>
+        /// Gets a random voice.
+        /// </summary>
+        /// <param name="gender">The gender of the speaker.</param>
+        /// <returns>Voice name.</returns>
+        private string GetVoice(Gender gender)
+        {
+            var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
+            return voices[new Random().Next(voices.Length)]; ;
         }
     }
 }

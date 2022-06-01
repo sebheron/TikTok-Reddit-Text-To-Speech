@@ -24,7 +24,7 @@ ISpeechSynthesisService GetSpeechSynth(string? server, string? key, string confi
     catch (Exception)
     {
         File.Delete(config);
-        Console.WriteLine("Azure specification is invalid. Defaulting to built-in TTS.");
+        Console.WriteLine("Azure specification is invalid. Defaulting to built-in windows TTS.");
     }
     return new WindowsSpeechSynthesisService();
 }
@@ -37,6 +37,7 @@ try
     var start = parsed.Start ?? TimeSpan.Zero;
     var output = parsed.Output ?? String.Empty;
     var comments = parsed.Comments ?? 0;
+    var alternate = parsed.Alternate ?? false;
 
     var imageService = new ImageService(400);
     var videoService = new FFMPEGService();
@@ -52,9 +53,9 @@ try
     }
     else
     {
-        video = await videoGenerator.GenerateVideo(parsed.Url, parsed.Background, output, gender, start, comments);
+        video = await videoGenerator.GenerateVideo(parsed.Url, parsed.Background, output, gender, start, comments, alternate);
     }
-    new Process() { StartInfo = new ProcessStartInfo(video) { UseShellExecute = true } }.Start();
+    if (video != string.Empty)  new Process() { StartInfo = new ProcessStartInfo(video) { UseShellExecute = true } }.Start();
 }
 catch (ArgException ex)
 {

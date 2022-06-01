@@ -27,5 +27,7 @@ namespace RedditTextToSpeech.Presentation
         public string? Server { get; set; }
 
         public string? Key { get; set; }
+
+        public bool? Alternate { get; set; }
     }
 }
