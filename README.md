@@ -23,7 +23,7 @@ This example generates a post video with a single voice, using the built-in Wind
 https://user-images.githubusercontent.com/6990718/171319951-8a7e4287-5c42-41ac-bf62-de582b73e3f4.mp4
 
 ### Complex usage
-This example generates a comments video with multiple voices, using the Azure TTS service, with alternating voices.
+This example generates a comments video, using the Azure TTS service, with alternating voices.
 
 Azure key information is saved for future usage, so it does not have to be specified each generation.
 
