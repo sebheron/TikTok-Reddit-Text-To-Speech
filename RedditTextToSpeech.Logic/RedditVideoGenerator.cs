@@ -4,7 +4,6 @@ using RedditTextToSpeech.Logic.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic
@@ -21,6 +20,8 @@ namespace RedditTextToSpeech.Logic
         private readonly IRedditService redditService;
         private readonly ISpeechSynthesisService speechSynthesisService;
         private readonly IVideoFactory videoFactory;
+
+        private readonly Random random;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RedditVideoGenerator"/> class.
@@ -39,6 +40,7 @@ namespace RedditTextToSpeech.Logic
             this.audioClipFactory = new AudioClipFactory(speechSynthesisService);
             this.speechSynthesisService = speechSynthesisService;
             this.redditService = redditService;
+            this.random = new Random();
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace RedditTextToSpeech.Logic
             {
                 var post = this.redditService.GetPostInformation(url);
                 var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
-                var voice = voices[new Random().Next(voices.Length)];
+                var voice = this.GetVoice(voices);
 
                 var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
@@ -159,7 +161,10 @@ namespace RedditTextToSpeech.Logic
         /// <returns>Voice name.</returns>
         private string GetVoice(string[] voices, string? currentVoice = null)
         {
-            return voices.Where(x => x != currentVoice).ElementAt(new Random().Next(voices.Length));
+            var r = new Random().Next(voices.Length - 1);
+            var i = Array.IndexOf(voices, currentVoice);
+            if (r >= i) r++;
+            return voices[r];
         }
     }
 }
