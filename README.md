@@ -1,4 +1,9 @@
 # TikTok-Reddit-Text-To-Speech
+![HitCount](https://hits.dwyl.com/sebheron/tiktok-reddit-text-to-speech.svg?style=flat)
+![Issues](https://img.shields.io/github/issues/sebheron/tiktok-reddit-text-to-speech)
+![Forks](https://img.shields.io/github/forks/sebheron/tiktok-reddit-text-to-speech)
+![Stars](https://img.shields.io/github/stars/sebheron/tiktok-reddit-text-to-speech)
+
 Application and library for generating TikTok videos from Reddit posts and comments.
 The console application requires FFMPEG to run.
 
