@@ -14,6 +14,18 @@ The console application requires FFMPEG to run.
 - Builds images to represent parts of Reddit posts/comments.
 - Compiles a video using FFMPEG (and possibly other methods further down the line).
 
+## Commands
+| Command      | Type         | Description            | Required     |
+| ------------ | ------------ | ---------------------- | ------------ |
+| -url         | String       | Reddit URL             | Yes          |
+| -background  | String       | Background Video Path  | Yes          |
+| -output      | String       | Output Path            | No           |
+| -gender      | Male/Female  | Voice Gender           | No           |
+| -start       | Time Span    | Start Time (00:00:00)  | No           |
+| -comments    | Integer      | No. Comments           | No           |
+| -server      | String       | Server Location        | No           |
+| -key         | String       | Azure Subscription Key | No           |
+
 ## Examples
 ### Basic usage
 This example generates a post video with a single voice, using the built-in Windows TTS service.
