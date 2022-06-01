@@ -4,6 +4,7 @@ using RedditTextToSpeech.Logic.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic
@@ -106,7 +107,8 @@ namespace RedditTextToSpeech.Logic
             try
             {
                 var post = this.redditService.GetPostInformation(url, commentsToHarvest);
-                var voice = this.GetVoice(gender);
+                var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
+                var voice = this.GetVoice(voices);
 
                 var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
@@ -116,7 +118,7 @@ namespace RedditTextToSpeech.Logic
                 {
                     if (alternateVoice)
                     {
-                        voice = this.GetVoice(gender);
+                        voice = this.GetVoice(voices, voice);
                     }
                     var contentImage = await this.imageFactory.GetImage(comment.Content[0], comment.Username);
                     var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice);
@@ -155,10 +157,9 @@ namespace RedditTextToSpeech.Logic
         /// </summary>
         /// <param name="gender">The gender of the speaker.</param>
         /// <returns>Voice name.</returns>
-        private string GetVoice(Gender gender)
+        private string GetVoice(string[] voices, string? currentVoice = null)
         {
-            var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
-            return voices[new Random().Next(voices.Length)]; ;
+            return voices.Where(x => x != currentVoice).ElementAt(new Random().Next(voices.Length));
         }
     }
 }
