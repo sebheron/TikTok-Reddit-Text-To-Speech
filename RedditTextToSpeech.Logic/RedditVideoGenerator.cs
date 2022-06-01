@@ -13,7 +13,7 @@ namespace RedditTextToSpeech.Logic
     /// Requires services to be specified.
     /// Some built-in ones exist, however custom implementations can be provided by implementing the interfaces.
     /// </summary>
-    public class RedditVideoGenerator
+    public class RedditVideoGenerator : IRedditVideoGenerator
     {
         private readonly IAudioClipFactory audioClipFactory;
         private readonly IImageFactory imageFactory;
@@ -114,6 +114,10 @@ namespace RedditTextToSpeech.Logic
 
                 foreach (var comment in post.Comments)
                 {
+                    if (alternateVoice)
+                    {
+                        voice = this.GetVoice(gender);
+                    }
                     var contentImage = await this.imageFactory.GetImage(comment.Content[0], comment.Username);
                     var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice);
                     values.Add(new AudioImagePair(contentAudio, contentImage));
@@ -122,10 +126,6 @@ namespace RedditTextToSpeech.Logic
                         var commentImage = await this.imageFactory.GetImage(comment.Content[i]);
                         var commentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[i], voice);
                         values.Add(new AudioImagePair(commentAudio, commentImage));
-                    }
-                    if (alternateVoice)
-                    {
-                        voice = this.GetVoice(gender);
                     }
                 }
 
