@@ -1,5 +1,6 @@
 # TikTok-Reddit-Text-To-Speech
 Application and library for generating TikTok videos from Reddit posts and comments.
+The console application requires FFMPEG to run.
 
 ## Features
 - Loads reddit information directly from URL.
