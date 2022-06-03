@@ -1,5 +1,6 @@
 ﻿using RedditTextToSpeech.Logic.Services;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Factories
@@ -29,7 +30,7 @@ namespace RedditTextToSpeech.Logic.Factories
         public async Task<string> GetAudioClip(string text, string voice)
         {
             var path = $"{Guid.NewGuid()}{this.synthesisService.Extension}";
-            return await this.synthesisService.GetSound(path, voice, text);
+            return Path.GetFullPath(await this.synthesisService.GetSound(path, voice, text));
         }
     }
 }

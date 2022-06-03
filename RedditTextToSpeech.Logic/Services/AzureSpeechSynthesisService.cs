@@ -111,7 +111,7 @@ namespace RedditTextToSpeech.Logic.Services
                         response.EnsureSuccessStatusCode();
                         using (var dataStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
                         {
-                            using (var fileStream = new FileStream(path + this.Extension, FileMode.Create, FileAccess.Write, FileShare.Write))
+                            using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write))
                             {
                                 await dataStream.CopyToAsync(fileStream).ConfigureAwait(false);
                                 fileStream.Close();
@@ -120,7 +120,7 @@ namespace RedditTextToSpeech.Logic.Services
                     }
                 }
             }
-            return path + this.Extension;
+            return path;
         }
     }
 }
