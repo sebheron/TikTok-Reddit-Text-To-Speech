@@ -3,6 +3,7 @@ using RedditTextToSpeech.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace RedditTextToSpeech.Logic.Services
                 var count = values.Count;
                 var tempAudio = Path.GetFullPath($"{Guid.NewGuid()}.wav");
                 var tempVideo = Path.GetFullPath($"{Guid.NewGuid()}.mp4");
+                var culture = CultureInfo.CreateSpecificCulture("en-US");
 
                 WaveFileWriter ? writer = null;
                 byte[] buffer = new byte[1024];
@@ -70,7 +72,7 @@ namespace RedditTextToSpeech.Logic.Services
                     overlays.Append($"[{i + 1}]");
                     overlays.Append(i > 0 ? $"[v{i - 1}]" : "[a]");
                     overlays.Append($"scale2ref=iw*0.9:ow/mdar[p{i}][s{i}];");
-                    overlays.Append($"[s{i}][p{i}]overlay = (main_w-overlay_w)/2:(main_h-overlay_h)/2:enable = 'between(t,{time.TotalSeconds},{(time + durations[i]).TotalSeconds})'[v{i}]");
+                    overlays.Append($"[s{i}][p{i}]overlay = (main_w-overlay_w)/2:(main_h-overlay_h)/2:enable = 'between(t,{time.TotalSeconds.ToString(culture)},{(time + durations[i]).TotalSeconds.ToString(culture)})'[v{i}]");
                     if (i < count - 1)
                     {
                         overlays.Append(";");
