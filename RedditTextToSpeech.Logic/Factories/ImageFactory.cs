@@ -1,5 +1,6 @@
 ﻿using RedditTextToSpeech.Logic.Services;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Factories
@@ -31,7 +32,7 @@ namespace RedditTextToSpeech.Logic.Factories
         public async Task<string> GetImage(string text, string username)
         {
             var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
-            return await this.imageService.GetImage(path, text, username);
+            return Path.GetFullPath(await this.imageService.GetImage(path, text, username));
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace RedditTextToSpeech.Logic.Factories
         public async Task<string> GetImage(string title, string username, string subreddit)
         {
             var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
-            return await this.imageService.GetImage(path, title, username, subreddit);
+            return Path.GetFullPath(await this.imageService.GetImage(path, title, username, subreddit));
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace RedditTextToSpeech.Logic.Factories
         public async Task<string> GetImage(string text)
         {
             var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
-            return await this.imageService.GetImage(path, text);
+            return Path.GetFullPath(await this.imageService.GetImage(path, text));
         }
     }
 }

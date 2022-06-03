@@ -35,8 +35,8 @@ namespace RedditTextToSpeech.Logic.Services
                 var durations = new List<TimeSpan>();
                 var totalDuration = TimeSpan.Zero;
                 var count = values.Count;
-                var tempAudio = $"{Guid.NewGuid()}.wav";
-                var tempVideo = $"{Guid.NewGuid()}.mp4";
+                var tempAudio = Path.GetFullPath("{Guid.NewGuid()}.wav");
+                var tempVideo = Path.GetFullPath($"{Guid.NewGuid()}.mp4");
 
                 WaveFileWriter ? writer = null;
                 byte[] buffer = new byte[1024];

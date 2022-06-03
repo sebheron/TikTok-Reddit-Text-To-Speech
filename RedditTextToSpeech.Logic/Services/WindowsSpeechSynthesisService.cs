@@ -49,12 +49,12 @@ namespace RedditTextToSpeech.Logic.Services
             await Task.Run(() =>
             {
                 using var synthesizer = this.GetSynth();
-                synthesizer.SetOutputToWaveFile(path + this.Extension,
+                synthesizer.SetOutputToWaveFile(path,
                   new SpeechAudioFormatInfo(32000, AudioBitsPerSample.Sixteen, AudioChannel.Mono));
                 synthesizer.SelectVoice(voice);
                 synthesizer.Speak(text);
             });
-            return path + this.Extension;
+            return path;
         }
 
         /// <summary>

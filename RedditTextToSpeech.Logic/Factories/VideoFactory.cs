@@ -33,7 +33,7 @@ namespace RedditTextToSpeech.Logic.Factories
         public async Task<string> GetVideo(IList<AudioImagePair> values, TimeSpan startTime, string background, string output)
         {
             var path = Path.Combine(output, $"{Guid.NewGuid()}{this.videoService.Extension}");
-            return await this.videoService.GetVideo(path, values, startTime, background);
+            return Path.GetFullPath(await this.videoService.GetVideo(path, values, startTime, background));
         }
     }
 }
