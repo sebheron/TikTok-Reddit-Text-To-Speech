@@ -35,7 +35,7 @@ try
 
     var gender = parsed.Gender ?? Gender.Male;
     var start = parsed.Start ?? TimeSpan.Zero;
-    var output = parsed.Output ?? String.Empty;
+    var output = parsed.Output ?? Environment.CurrentDirectory;
     var comments = parsed.Comments ?? 0;
     var alternate = parsed.Alternate ?? false;
 
