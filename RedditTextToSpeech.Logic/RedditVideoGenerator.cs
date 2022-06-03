@@ -161,9 +161,10 @@ namespace RedditTextToSpeech.Logic
         /// <returns>Voice name.</returns>
         private string GetVoice(string[] voices, string? currentVoice = null)
         {
+            if (voices.Length <= 0) return String.Empty;
+            if (voices.Length == 1) return voices[0];
             var r = new Random().Next(voices.Length - 1);
             var i = Array.IndexOf(voices, currentVoice);
-            if (i < 0) return voices[r];
             if (r >= i) r++;
             return voices[r];
         }
