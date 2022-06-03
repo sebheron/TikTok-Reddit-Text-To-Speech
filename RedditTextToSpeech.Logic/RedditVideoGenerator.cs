@@ -163,6 +163,7 @@ namespace RedditTextToSpeech.Logic
         {
             var r = new Random().Next(voices.Length - 1);
             var i = Array.IndexOf(voices, currentVoice);
+            if (i < 0) return voices[r];
             if (r >= i) r++;
             return voices[r];
         }
