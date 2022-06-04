@@ -4,9 +4,9 @@ using RedditTextToSpeech.Logic;
 using RedditTextToSpeech.Logic.Services;
 using RedditTextToSpeech.Presentation;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
-
-ISpeechSynthesisService GetSpeechSynth(string? server, string? key, string config)
+static ISpeechSynthesisService GetSpeechSynth(string? server, string? key, string config)
 {
     try
     {
@@ -29,9 +29,28 @@ ISpeechSynthesisService GetSpeechSynth(string? server, string? key, string confi
     return new WindowsSpeechSynthesisService();
 }
 
+static void CleanDirectory()
+{
+    Console.WriteLine("Cleaning directory for all files named as .");
+    foreach (var file in Directory.GetFiles(Environment.CurrentDirectory))
+    {
+        if (Regex.IsMatch(file, @"/\/[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}.[mwp][pan][4vg]/"))
+        {
+            Console.WriteLine($"Cleaned file: {Path.GetFileName(file)}");
+            File.Delete(file);
+        }
+    }
+}
+
 try
 {
     var parsed = Args.Parse<Arguments>(args);
+
+    if (parsed.Clean ?? false)
+    {
+        CleanDirectory();
+        return;
+    }
 
     var gender = parsed.Gender ?? Gender.Male;
     var start = parsed.Start ?? TimeSpan.Zero;
