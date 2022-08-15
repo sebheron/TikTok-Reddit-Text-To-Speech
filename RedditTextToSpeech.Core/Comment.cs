@@ -16,13 +16,19 @@ namespace RedditTextToSpeech.Core
         /// <param name="username"></param>
         /// <param name="content"></param>
         /// <param name="flair"></param>
-        public Comment(string image, string username, IList<string> content, string flair)
+        public Comment(Post post, string image, string username, IList<string> content, string flair)
         {
+            this.Post = post;
             this.Image = image;
             this.Username = username;
             this.Content = content;
             this.Flair = flair;
         }
+
+        /// <summary>
+        /// Parent post.
+        /// </summary>
+        public Post Post { get; }
 
         /// <summary>
         /// Gets the content.

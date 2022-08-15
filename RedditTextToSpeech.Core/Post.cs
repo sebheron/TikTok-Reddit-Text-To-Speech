@@ -17,7 +17,7 @@ namespace RedditTextToSpeech.Core
         /// <param name="content">The content.</param>
         /// <param name="icon">The icon.</param>
         /// <param name="flair">The flair.</param>
-        public Post(string subreddit, string username, string title, IList<string> content, string icon, string flair)
+        public Post(string subreddit, string username, string title, IList<string> content, string icon, string flair, string url)
         {
             this.Subreddit = subreddit;
             this.Username = username;
@@ -26,6 +26,7 @@ namespace RedditTextToSpeech.Core
             this.Image = icon;
             this.Comments = new List<Comment>();
             this.Flair = flair;
+            this.Url = url;
         }
 
         /// <summary>
@@ -62,5 +63,10 @@ namespace RedditTextToSpeech.Core
         /// Gets the username.
         /// </summary>
         public string Username { get; }
+
+        /// <summary>
+        /// The URL of the post.
+        /// </summary>
+        public string Url { get; }
     }
 }

@@ -32,7 +32,7 @@ namespace RedditTextToSpeech.Logic.Services
             //Parse post details.
             var postData = array[0]?.SelectTokens("$..children").First().SelectToken("$..data");
             if (postData == null) throw new NullReferenceException("Post is null");
-            var post = this.ParsePost(postData);
+            var post = this.ParsePost(postData, url);
 
             if (array.Count <= 1) return post;
 
@@ -43,7 +43,7 @@ namespace RedditTextToSpeech.Logic.Services
             {
                 var commentData = comments[i].SelectToken("$.data");
                 if (commentData == null) throw new NullReferenceException("Comment is null");
-                post.Comments.Add(this.ParseComment(commentData));
+                post.Comments.Add(this.ParseComment(commentData, post));
             }
 
             return post;
@@ -115,7 +115,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="commentData">The comment data JToken.</param>
         /// <exception cref="Exception">Throws an exception if the content can't be retrieved.</exception>
         /// <returns>A Comment instance.</returns>
-        private Comment ParseComment(JToken commentData)
+        private Comment ParseComment(JToken commentData, Post post)
         {
             var username = commentData.SelectToken("$.author")?.Value<string>();
             var content = commentData.SelectToken("$.body")?.Value<string>()?.Trim()
@@ -124,7 +124,8 @@ namespace RedditTextToSpeech.Logic.Services
 
             if (username == null || content == null) throw new NullReferenceException();
 
-            return new Comment(this.GetAvatarUrl(username),
+            return new Comment(post,
+                this.GetAvatarUrl(username),
                 username,
                 this.GetParagraphs(content),
                 flair);
@@ -136,7 +137,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="postData">The post data JToken.</param>
         /// <exception cref="Exception">Throws an exception if the content can't be retrieved.</exception>
         /// <returns>A Post instance.</returns>
-        private Post ParsePost(JToken postData)
+        private Post ParsePost(JToken postData, string url)
         {
             var subreddit = postData.SelectToken("$.subreddit")?.Value<string>();
             var username = postData.SelectToken("$.author")?.Value<string>();
@@ -152,7 +153,8 @@ namespace RedditTextToSpeech.Logic.Services
                 postTitle,
                 this.GetParagraphs(content),
                 this.GetIconUrl(subreddit),
-                flair);
+                flair,
+                url);
         }
 
         /// <summary>
