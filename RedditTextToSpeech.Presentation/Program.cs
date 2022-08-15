@@ -36,8 +36,9 @@ try
     var gender = parsed.Gender ?? Gender.Male;
     var start = parsed.Start ?? TimeSpan.Zero;
     var output = parsed.Output ?? Environment.CurrentDirectory;
-    var comments = parsed.Comments ?? 0;
+    var comments = parsed.Comments;
     var alternate = parsed.Alternate ?? false;
+    var skip = parsed.Skip;
 
     var imageService = new ImageService(400);
     var videoService = new FFMPEGService();
@@ -47,13 +48,13 @@ try
     var videoGenerator = new RedditVideoGenerator(videoService, imageService, speechService, redditService);
 
     var video = string.Empty;
-    if (comments <= 0)
+    if ((comments ?? 0) <= 0)
     {
         video = await videoGenerator.GenerateVideo(parsed.Url, parsed.Background, output, gender, start);
     }
     else
     {
-        video = await videoGenerator.GenerateVideo(parsed.Url, parsed.Background, output, gender, start, comments, alternate);
+        video = await videoGenerator.GenerateVideo(parsed.Url, parsed.Background, output, gender, start, comments, skip, alternate);
     }
     if (video != string.Empty)  new Process() { StartInfo = new ProcessStartInfo(video) { UseShellExecute = true } }.Start();
 }

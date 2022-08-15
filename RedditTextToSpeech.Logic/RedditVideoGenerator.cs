@@ -103,12 +103,12 @@ namespace RedditTextToSpeech.Logic
         /// <param name="startTime">The starting time for the background video.</param>
         /// <param name="commentsToHarvest">The number of comments to add to the video.</param>
         /// <returns>The path to the video produced.</returns>
-        public async Task<string> GenerateVideo(string url, string backgroundVideo, string output, Gender gender, TimeSpan startTime, int commentsToHarvest, bool alternateVoice)
+        public async Task<string> GenerateVideo(string url, string backgroundVideo, string output, Gender gender, TimeSpan startTime, int? commentsToHarvest, int? commentsToSkip, bool alternateVoice)
         {
             var values = new List<AudioImagePair>();
             try
             {
-                var post = this.redditService.GetPostInformation(url, commentsToHarvest);
+                var post = this.redditService.GetPostInformation(url, commentsToHarvest, commentsToSkip);
                 var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
                 var voice = this.GetVoice(voices);
 

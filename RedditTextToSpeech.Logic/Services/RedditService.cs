@@ -22,7 +22,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="url">The url of the reddit post.</param>
         /// <param name="commentCount">The number of comments to collect.</param>
         /// <returns>Post object containing post information.</returns>
-        public Post GetPostInformation(string url, int? commentCount = 0)
+        public Post GetPostInformation(string url, int? commentCount, int? commentsToSkip)
         {
             //Get JSON from URL and parse.
             var postJson = this.GetJsonStringFromURL($"{url}.json");
@@ -39,7 +39,7 @@ namespace RedditTextToSpeech.Logic.Services
             //Parse comments details.
             var comments = array[1]?.SelectTokens("$..children[?(@.kind == 't1')]").ToArray();
             if (comments == null) throw new NullReferenceException("Comments are null");
-            for (int i = 0; i < commentCount && i < comments.Length; i++)
+            for (int i = (commentCount ?? 0); i < (commentCount ?? 0) + (commentsToSkip ?? 0) && i < comments.Length; i++)
             {
                 var commentData = comments[i].SelectToken("$.data");
                 if (commentData == null) throw new NullReferenceException("Comment is null");
