@@ -61,7 +61,7 @@ namespace RedditTextToSpeech.Logic
                 var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
                 var voice = this.GetVoice(voices);
 
-                var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
+                var image = await this.imageFactory.GetImage(post);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
                 values.Add(new AudioImagePair(audio, image));
 
@@ -112,7 +112,7 @@ namespace RedditTextToSpeech.Logic
                 var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
                 var voice = this.GetVoice(voices);
 
-                var image = await this.imageFactory.GetImage(post.Title, post.Username, post.Subreddit);
+                var image = await this.imageFactory.GetImage(post);
                 var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
                 values.Add(new AudioImagePair(audio, image));
 
@@ -122,7 +122,7 @@ namespace RedditTextToSpeech.Logic
                     {
                         voice = this.GetVoice(voices, voice);
                     }
-                    var contentImage = await this.imageFactory.GetImage(comment.Content[0], comment.Username);
+                    var contentImage = await this.imageFactory.GetImage(comment);
                     var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice);
                     values.Add(new AudioImagePair(contentAudio, contentImage));
                     for (int i = 1; i < comment.Content.Count; i++)

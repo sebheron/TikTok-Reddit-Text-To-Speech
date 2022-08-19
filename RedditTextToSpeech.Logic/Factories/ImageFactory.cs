@@ -1,4 +1,5 @@
 ﻿using RedditTextToSpeech.Logic.Services;
+using RedditTextToSpeech.Core;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -29,10 +30,10 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="subreddit">Subreddit to display.</param>
         /// <param name="avatar">The link to the saved avatar.</param>
         /// <returns>Awaitable task returning path.</returns>
-        public async Task<string> GetImage(string text, string username)
+        public async Task<string> GetImage(Post post)
         {
             var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
-            return Path.GetFullPath(await this.imageService.GetImage(path, text, username));
+            return Path.GetFullPath(await this.imageService.GetImage(path, post));
         }
 
         /// <summary>
@@ -42,10 +43,10 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="username">Username to display.</param>
         /// <param name="subreddit">Subreddit to display.</param>
         /// <returns>Awaitable task returning path.</returns>
-        public async Task<string> GetImage(string title, string username, string subreddit)
+        public async Task<string> GetImage(Comment comment)
         {
             var path = $"{Guid.NewGuid()}{this.imageService.Extension}";
-            return Path.GetFullPath(await this.imageService.GetImage(path, title, username, subreddit));
+            return Path.GetFullPath(await this.imageService.GetImage(path, comment));
         }
 
         /// <summary>
