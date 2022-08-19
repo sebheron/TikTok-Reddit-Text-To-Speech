@@ -5,9 +5,9 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditTextToSpeech.Presentation", "RedditTextToSpeech.Presentation\RedditTextToSpeech.Presentation.csproj", "{59E245B8-96BA-4D87-B055-033A0EA3CA59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditTextToSpeech.Logic", "RedditTextToSpeech.Logic\RedditTextToSpeech.Logic.csproj", "{96C24886-B73A-47BB-BC75-C9EA72287D24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditTextToSpeech.Logic", "RedditTextToSpeech.Logic\RedditTextToSpeech.Logic.csproj", "{96C24886-B73A-47BB-BC75-C9EA72287D24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditTextToSpeech.Core", "RedditTextToSpeech.Core\RedditTextToSpeech.Core.csproj", "{42471A43-112E-4655-AC52-1E7CD4645DFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditTextToSpeech.Core", "RedditTextToSpeech.Core\RedditTextToSpeech.Core.csproj", "{42471A43-112E-4655-AC52-1E7CD4645DFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
