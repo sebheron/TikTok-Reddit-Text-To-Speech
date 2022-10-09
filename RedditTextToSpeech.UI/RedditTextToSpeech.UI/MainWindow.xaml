@@ -1,0 +1,50 @@
+﻿<Window
+    x:Class="RedditTextToSpeech.UI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RedditTextToSpeech.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid x:Name="_main">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <MenuBar>
+            <MenuBarItem Title="File">
+                <MenuFlyoutItem Text="Save Project" Command="{Binding SaveProjectCommand}"/>
+                <MenuFlyoutItem Text="Load Project" Command="{Binding LoadProjectCommand}"/>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem Text="Add entries from URL" Command="{Binding LoadRedditURLCommand}"/>
+            </MenuBarItem>
+            <MenuBarItem Title="Render">
+                <MenuFlyoutItem Text="Render Current Project" Command="{Binding RenderCurrentProjectCommand}"/>
+                <MenuFlyoutItem Text="Render All Projects"/>
+            </MenuBarItem>
+        </MenuBar>
+        <TabView Grid.Row="1" VerticalAlignment="Stretch"
+                 TabItemsSource="{Binding Projects}" SelectedItem="{Binding CurrentProject, Mode=TwoWay}"
+                 AddTabButtonCommand="{Binding AddNewProjectCommand}" TabCloseRequested="TabCloseRequested">
+            <TabView.TabItemTemplate>
+                <DataTemplate>
+                    <TabViewItem Header="{Binding Header}">
+                        <ScrollViewer>
+                            <StackPanel Orientation="Vertical">
+                                <Button Command="{Binding PushEmptyFrontCommand}" FontSize="20" FontWeight="Bold" Content="+" Margin="10 10 10 5" Padding="3" HorizontalAlignment="Stretch"/>
+                                <ItemsControl ItemsSource="{Binding Entries}" ItemTemplate="{StaticResource EntryTemplate}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                                <Button Command="{Binding PushEmptyBackCommand}" FontSize="20" FontWeight="Bold" Content="+" Margin="10 5 10 10" Padding="3" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabViewItem>
+                </DataTemplate>
+            </TabView.TabItemTemplate>
+        </TabView>
+    </Grid>
+</Window>

@@ -1,4 +1,4 @@
-﻿namespace RedditTextToSpeech.Core
+﻿namespace RedditTextToSpeech.Core.Containers
 {
     /// <summary>
     /// Class used to contain both an image path and an audio path.
@@ -13,8 +13,8 @@
         /// <param name="imagePath">The path to the image file.</param>
         public AudioImagePair(string audioPath, string imagePath)
         {
-            this.AudioPath = audioPath;
-            this.ImagePath = imagePath;
+            AudioPath = audioPath;
+            ImagePath = imagePath;
         }
 
         /// <summary>

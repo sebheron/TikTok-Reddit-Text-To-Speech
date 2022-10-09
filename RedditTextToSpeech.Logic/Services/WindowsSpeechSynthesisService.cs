@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using RedditTextToSpeech.Logic.Containers;
+using System.Linq;
 using System.Speech.AudioFormat;
 using System.Speech.Synthesis;
 using System.Threading.Tasks;
@@ -18,8 +19,7 @@ namespace RedditTextToSpeech.Logic.Services
         {
             using var synthesizer = this.GetSynth();
             var voices = synthesizer.GetInstalledVoices();
-            this.MaleVoices = voices.Where(x => x.VoiceInfo.Gender == VoiceGender.Male).Select(x => x.VoiceInfo.Name).ToArray();
-            this.FemaleVoices = voices.Where(x => x.VoiceInfo.Gender == VoiceGender.Female).Select(x => x.VoiceInfo.Name).ToArray();
+            this.Voices = voices.Select(x => new WindowsVoice(x)).ToArray();
         }
 
         /// <summary>
@@ -30,12 +30,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <summary>
         /// Gets the female voices.
         /// </summary>
-        public string[] FemaleVoices { get; }
-
-        /// <summary>
-        /// Gets the male voices.
-        /// </summary>
-        public string[] MaleVoices { get; }
+        public IVoice[] Voices { get; }
 
         /// <summary>
         /// Gets the sound.

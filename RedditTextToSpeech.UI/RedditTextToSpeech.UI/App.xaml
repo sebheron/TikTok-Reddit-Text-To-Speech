@@ -1,0 +1,66 @@
+﻿<Application
+    x:Class="RedditTextToSpeech.UI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RedditTextToSpeech.UI"
+    RequestedTheme="Dark">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <!-- Other merged dictionaries here -->
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Name="EntryTemplate">
+                <Grid Margin="10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="38"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding DeleteEntryCommand}" Background="{ThemeResource FlipViewButtonPressedBackgroundThemeBrush}" BorderThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" CornerRadius="5 5 0 0">
+                        <FontIcon FontSize="12" Glyph="&#xE10A;"/>
+                    </Button>
+                    <Border Grid.Row="1" Grid.ColumnSpan="2" Padding="10" CornerRadius="0 5 5 5" Background="{ThemeResource FlipViewButtonPressedBackgroundThemeBrush}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.05*"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.42*"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox IsChecked="{Binding ShouldUse, Mode=TwoWay}"/>
+                            <TextBox Text="{Binding Text, Mode=TwoWay}" FontSize="{Binding TextFontSize}" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0 0 10 0" PlaceholderText="Speech...">
+                                <TextBox.Resources>
+                                    <SolidColorBrush x:Key="TextControlBackground" Color="{ThemeResource FlipViewButtonPressedBackgroundThemeBrush}"/>
+                                    <SolidColorBrush x:Key="TextControlBorderBrush" Color="{ThemeResource FlipViewButtonPressedBackgroundThemeBrush}"/>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{ThemeResource FlipViewButtonPressedBackgroundThemeBrush}"/>
+                                </TextBox.Resources>
+                            </TextBox>
+                            <Grid Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <ComboBox ItemsSource="{Binding EntryTypes}" SelectedItem="{Binding SelectedEntryType, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="0 5 5 0"></ComboBox>
+                                <ComboBox DisplayMemberPath="DisplayName"  ItemsSource="{Binding Voices}" SelectedItem="{Binding SelectedVoice, Mode=TwoWay}" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5 5 0 0"></ComboBox>
+                                <Button Command="{Binding MoveUpCommand}" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5 0" Content="▲"/>
+                                <Button Command="{Binding MoveDownCommand}" Grid.Row="2" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5 0" Content="▼"/>
+                                <TextBox Text="{Binding CommenterName, Mode=TwoWay}" FontSize="15" Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="0 5 0 0" PlaceholderText="Username"/>
+                                <TextBox Text="{Binding SubredditName, Mode=TwoWay}" FontSize="15" Grid.Row="2" Grid.ColumnSpan="2" TextWrapping="Wrap" Margin="0 5 0 0" PlaceholderText="Subreddit"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

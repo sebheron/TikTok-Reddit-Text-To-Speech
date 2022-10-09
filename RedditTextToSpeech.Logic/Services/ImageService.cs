@@ -1,4 +1,4 @@
-﻿using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core.Interfaces;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -19,7 +19,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// Initializes a new instance of the <see cref="ImageService"/> class.
         /// </summary>
         /// <param name="maxWidth">The max width.</param>
-        public ImageService(int maxWidth)
+        public ImageService(int maxWidth = 400)
         {
             this.maxWidth = maxWidth;
         }
@@ -38,7 +38,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="subreddit">The subreddit.</param>
         /// <param name="avatar">Link to users avatar.</param>
         /// <returns>Awaitable task returning path.</returns>
-        public async Task<string> GetImage(string path, Comment comment)
+        public async Task<string> GetImage(string path, IComment comment)
         {
             await Task.Run(() =>
             {
@@ -46,7 +46,7 @@ namespace RedditTextToSpeech.Logic.Services
                 var topFont = new Font(new FontFamily("Arial"), 14, FontStyle.Regular, GraphicsUnit.Pixel);
                 var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
 
-                var bitmapHeight = (int)retBitmapGraphics.MeasureString(comment.Content[0], font, maxWidth).Height;
+                var bitmapHeight = (int)retBitmapGraphics.MeasureString(comment.First, font, maxWidth).Height;
                 var usernameHeight = (int)retBitmapGraphics.MeasureString(comment.Username, topFont, maxWidth).Height;
 
                 var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + usernameHeight + 5);
@@ -61,7 +61,7 @@ namespace RedditTextToSpeech.Logic.Services
 
                 retBitmapGraphics.DrawString($"u/{comment.Username}", topFont, new SolidBrush(Color.FromArgb(127, 159, 227)),
                         new RectangleF(5, 5, maxWidth, usernameHeight));
-                retBitmapGraphics.DrawString(comment.Content[0], font, new SolidBrush(Color.FromArgb(215, 218, 220)),
+                retBitmapGraphics.DrawString(comment.First, font, new SolidBrush(Color.FromArgb(215, 218, 220)),
                     new RectangleF(5, 5 + usernameHeight, maxWidth, bitmapHeight));
                 retBitmapGraphics.Flush();
 
@@ -78,13 +78,13 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="username">The username of the user.</param>
         /// <param name="subreddit">The subreddit.</param>
         /// <returns>Awaitable task returning path.</returns>
-        public async Task<string> GetImage(string path, Post post)
+        public async Task<string> GetImage(string path, IPost post)
         {
             await Task.Run(() =>
             {
                 var font = new Font(new FontFamily("Arial"), 20, FontStyle.Bold, GraphicsUnit.Pixel);
                 var topFont = new Font(new FontFamily("Arial"), 14, FontStyle.Regular, GraphicsUnit.Pixel);
-                var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
+                using var retBitmapGraphics = Graphics.FromImage(new Bitmap(1, 1));
 
                 var bitmapHeight = (int)retBitmapGraphics.MeasureString(post.Title, font, maxWidth).Height;
                 var usernameHeight = (int)retBitmapGraphics.MeasureString(post.Username, topFont, maxWidth).Height;
@@ -92,21 +92,21 @@ namespace RedditTextToSpeech.Logic.Services
 
                 var rect = new Rectangle(0, 0, maxWidth + 10, bitmapHeight + usernameHeight + subredditHeight + 5);
                 using var graphicsPath = this.CreatePath(rect, 15, true);
-                var retBitmap = new Bitmap(rect.Width, rect.Height);
+                using var retBitmap = new Bitmap(rect.Width, rect.Height);
                 retBitmap.MakeTransparent();
-                retBitmapGraphics = Graphics.FromImage(retBitmap);
-                retBitmapGraphics.FillPath(new SolidBrush(Color.FromArgb(220, 26, 26, 27)), graphicsPath);
-                retBitmapGraphics.DrawPath(new Pen(Color.FromArgb(220, 7, 7, 7), 1), graphicsPath);
-                retBitmapGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-                retBitmapGraphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
+                using var retBitmapGraphicsDraw = Graphics.FromImage(retBitmap);
+                retBitmapGraphicsDraw.FillPath(new SolidBrush(Color.FromArgb(220, 26, 26, 27)), graphicsPath);
+                retBitmapGraphicsDraw.DrawPath(new Pen(Color.FromArgb(220, 7, 7, 7), 1), graphicsPath);
+                retBitmapGraphicsDraw.SmoothingMode = SmoothingMode.AntiAlias;
+                retBitmapGraphicsDraw.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-                retBitmapGraphics.DrawString($"u/{post.Username}", topFont, new SolidBrush(Color.FromArgb(127, 159, 227)),
+                retBitmapGraphicsDraw.DrawString($"u/{post.Username}", topFont, new SolidBrush(Color.FromArgb(127, 159, 227)),
                         new RectangleF(5, 5 + subredditHeight, maxWidth, usernameHeight));
-                retBitmapGraphics.DrawString($"r/{post.Subreddit}", topFont, new SolidBrush(Color.FromArgb(129, 131, 132)),
+                retBitmapGraphicsDraw.DrawString($"r/{post.Subreddit}", topFont, new SolidBrush(Color.FromArgb(129, 131, 132)),
                         new RectangleF(5, 5, maxWidth, subredditHeight));
-                retBitmapGraphics.DrawString(post.Title, font, new SolidBrush(Color.FromArgb(215, 218, 220)),
+                retBitmapGraphicsDraw.DrawString(post.Title, font, new SolidBrush(Color.FromArgb(215, 218, 220)),
                     new RectangleF(5, usernameHeight + subredditHeight + 5, maxWidth, bitmapHeight));
-                retBitmapGraphics.Flush();
+                retBitmapGraphicsDraw.Flush();
 
                 retBitmap.Save(path, ImageFormat.Png);
             });

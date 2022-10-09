@@ -1,4 +1,4 @@
-﻿using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core.Content;
 using System;
 using System.Threading.Tasks;
 

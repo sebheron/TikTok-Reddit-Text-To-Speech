@@ -1,4 +1,4 @@
-﻿using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Factories
@@ -16,7 +16,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="subreddit">Subreddit to display.</param>
         /// <param name="avatar">The link to the saved avatar.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetImage(Post post);
+        Task<string> GetImage(IPost post);
 
         /// <summary>
         /// Gets the image.
@@ -25,7 +25,7 @@ namespace RedditTextToSpeech.Logic.Factories
         /// <param name="username">Username to display.</param>
         /// <param name="subreddit">Subreddit to display.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetImage(Comment comment);
+        Task<string> GetImage(IComment comment);
 
         /// <summary>
         /// Gets the image.

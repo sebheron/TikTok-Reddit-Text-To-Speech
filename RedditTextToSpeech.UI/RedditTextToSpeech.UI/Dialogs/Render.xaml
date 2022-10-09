@@ -1,0 +1,31 @@
+﻿<ContentDialog
+    x:Class="RedditTextToSpeech.UI.Dialogs.Render"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RedditTextToSpeech.UI.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Render Reddit Video">
+
+    <Grid Margin="0,10">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.ColumnSpan="3" Text="Background URL:" Margin="5 5 5 2" />
+        <TextBox x:Name="BackgroundURL" Grid.Row="1" Grid.ColumnSpan="3" PlaceholderText="URL..." Margin="5" />
+        <TextBlock Grid.ColumnSpan="3" Grid.Row="2" Text="Video Name:" Margin="5 5 5 2" />
+        <TextBox x:Name="OutputPath" Grid.Row="3" Grid.ColumnSpan="3" PlaceholderText="Name..." Margin="5" />
+        <Button HorizontalAlignment="Left" Click="RenderVideo" Grid.Row="4" Content="Render" Margin="0 10 0 0" Width="100" />
+        <Button HorizontalAlignment="Right" Click="Cancel" Grid.Row="4" Grid.Column="2" Content="Cancel" Margin="0 10 0 0" Width="100" />
+    </Grid>
+</ContentDialog>

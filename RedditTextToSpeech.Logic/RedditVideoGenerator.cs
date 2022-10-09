@@ -1,9 +1,12 @@
-﻿using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core.Containers;
+using RedditTextToSpeech.Core.Content;
+using RedditTextToSpeech.Logic.Containers;
 using RedditTextToSpeech.Logic.Factories;
 using RedditTextToSpeech.Logic.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic
@@ -58,17 +61,17 @@ namespace RedditTextToSpeech.Logic
             try
             {
                 var post = this.redditService.GetPostInformation(url);
-                var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
+                var voices = this.speechSynthesisService.Voices.Where(x => x.Gender == gender).ToArray();
                 var voice = this.GetVoice(voices);
 
                 var image = await this.imageFactory.GetImage(post);
-                var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
+                var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice.Name);
                 values.Add(new AudioImagePair(audio, image));
 
                 foreach (var content in post.Content)
                 {
                     var contentImage = await this.imageFactory.GetImage(content);
-                    var contentAudio = await this.audioClipFactory.GetAudioClip(content, voice);
+                    var contentAudio = await this.audioClipFactory.GetAudioClip(content, voice.Name);
                     values.Add(new AudioImagePair(contentAudio, contentImage));
                 }
 
@@ -109,26 +112,26 @@ namespace RedditTextToSpeech.Logic
             try
             {
                 var post = this.redditService.GetPostInformation(url, commentsToHarvest, commentsToSkip);
-                var voices = gender == Gender.Male ? this.speechSynthesisService.MaleVoices : this.speechSynthesisService.FemaleVoices;
+                var voices = this.speechSynthesisService.Voices.Where(x => x.Gender == gender).ToArray();
                 var voice = this.GetVoice(voices);
 
                 var image = await this.imageFactory.GetImage(post);
-                var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice);
+                var audio = await this.audioClipFactory.GetAudioClip(post.Title, voice.Name);
                 values.Add(new AudioImagePair(audio, image));
 
                 foreach (var comment in post.Comments)
                 {
                     if (alternateVoice)
                     {
-                        voice = this.GetVoice(voices, voice);
+                        voice = this.GetVoice(voices, voice.Name);
                     }
                     var contentImage = await this.imageFactory.GetImage(comment);
-                    var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice);
+                    var contentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[0], voice.Name);
                     values.Add(new AudioImagePair(contentAudio, contentImage));
                     for (int i = 1; i < comment.Content.Count; i++)
                     {
                         var commentImage = await this.imageFactory.GetImage(comment.Content[i]);
-                        var commentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[i], voice);
+                        var commentAudio = await this.audioClipFactory.GetAudioClip(comment.Content[i], voice.Name);
                         values.Add(new AudioImagePair(commentAudio, commentImage));
                     }
                 }
@@ -159,9 +162,9 @@ namespace RedditTextToSpeech.Logic
         /// </summary>
         /// <param name="gender">The gender of the speaker.</param>
         /// <returns>Voice name.</returns>
-        private string GetVoice(string[] voices, string? currentVoice = null)
+        private IVoice GetVoice(IVoice[] voices, string? currentVoice = null)
         {
-            if (voices.Length <= 0) return String.Empty;
+            if (voices.Length <= 0) return default;
             if (voices.Length == 1) return voices[0];
             var r = new Random().Next(voices.Length - 1);
             var i = Array.IndexOf(voices, currentVoice);

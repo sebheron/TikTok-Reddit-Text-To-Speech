@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "RedditTextToSpeech.UI (Package)": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
+    },
+    "RedditTextToSpeech.UI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

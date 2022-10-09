@@ -1,5 +1,5 @@
 ﻿using NAudio.Wave;
-using RedditTextToSpeech.Core;
+using RedditTextToSpeech.Core.Containers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

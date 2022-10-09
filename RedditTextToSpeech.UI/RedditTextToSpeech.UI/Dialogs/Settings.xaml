@@ -1,0 +1,40 @@
+﻿<ContentDialog
+    x:Class="RedditTextToSpeech.UI.Dialogs.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RedditTextToSpeech.UI.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Load Reddit URL">
+
+    <Grid Margin="0,10">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Voice Service:" Margin="5 7 5 2" />
+        <TextBlock Text="Default Voice:" Margin="5 7 5 2" Grid.Column="1" />
+        <ComboBox x:Name="VoiceServices" Grid.Row="1" HorizontalAlignment="Stretch" Margin="5">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ComboBox x:Name="VoiceSelector" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DisplayName}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button HorizontalAlignment="Left" Click="Load" Grid.Row="2" Content="Accept" Margin="5" Width="100" />
+        <Button HorizontalAlignment="Right" Click="Cancel" Grid.Row="2" Grid.Column="1" Content="Cancel" Margin="5" Width="100" />
+    </Grid>
+</ContentDialog>

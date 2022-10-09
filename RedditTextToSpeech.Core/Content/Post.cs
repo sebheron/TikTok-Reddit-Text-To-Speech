@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using RedditTextToSpeech.Core.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace RedditTextToSpeech.Core
+namespace RedditTextToSpeech.Core.Content
 {
     /// <summary>
     /// Class which contains specific post information retrieved from reddit.
     /// If information is not available it will be blank.
     /// </summary>
-    public class Post
+    public class Post : IPost
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Post"/> class.
@@ -19,14 +21,14 @@ namespace RedditTextToSpeech.Core
         /// <param name="flair">The flair.</param>
         public Post(string subreddit, string username, string title, IList<string> content, string icon, string flair, string url)
         {
-            this.Subreddit = subreddit;
-            this.Username = username;
-            this.Title = title;
-            this.Content = content;
-            this.Image = icon;
-            this.Comments = new List<Comment>();
-            this.Flair = flair;
-            this.Url = url;
+            Subreddit = subreddit;
+            Username = username;
+            Title = title;
+            Content = content;
+            Image = icon;
+            Comments = new List<Comment>();
+            Flair = flair;
+            Url = url;
         }
 
         /// <summary>
@@ -68,5 +70,10 @@ namespace RedditTextToSpeech.Core
         /// The URL of the post.
         /// </summary>
         public string Url { get; }
+
+        /// <summary>
+        /// First content entry.
+        /// </summary>
+        public string First => this.Content?.FirstOrDefault() ?? string.Empty;
     }
 }

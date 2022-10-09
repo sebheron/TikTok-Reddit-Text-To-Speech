@@ -1,5 +1,5 @@
 ﻿using PowerArgs;
-using RedditTextToSpeech.Core;
+using RedditTextToSpeech.Core.Content;
 using RedditTextToSpeech.Logic;
 using RedditTextToSpeech.Logic.Services;
 using RedditTextToSpeech.Presentation;
@@ -26,7 +26,7 @@ ISpeechSynthesisService GetSpeechSynth(string? server, string? key, string confi
         File.Delete(config);
         Console.WriteLine("Azure specification is invalid. Defaulting to built-in windows TTS.");
     }
-    return new WindowsSpeechSynthesisService();
+    return new TikTokSpeechSynthesisService();
 }
 
 try

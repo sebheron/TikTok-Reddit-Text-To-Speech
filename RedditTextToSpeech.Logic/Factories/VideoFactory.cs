@@ -1,4 +1,4 @@
-﻿using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core.Containers;
 using RedditTextToSpeech.Logic.Services;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace RedditTextToSpeech.Logic.Factories
     /// <summary>
     /// The video factory used for creating videos.
     /// </summary>
-    internal class VideoFactory : IVideoFactory
+    public class VideoFactory : IVideoFactory
     {
         private readonly IVideoService videoService;
 

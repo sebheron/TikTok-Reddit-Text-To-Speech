@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using RedditTextToSpeech.Logic.Containers;
+using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services
 {
@@ -13,14 +14,9 @@ namespace RedditTextToSpeech.Logic.Services
         string Extension { get; }
 
         /// <summary>
-        /// Gets the female voices.
+        /// Gets the voices.
         /// </summary>
-        string[] FemaleVoices { get; }
-
-        /// <summary>
-        /// Gets the male voices.
-        /// </summary>
-        string[] MaleVoices { get; }
+        IVoice[] Voices { get; }
 
         /// <summary>
         /// Gets the sound.

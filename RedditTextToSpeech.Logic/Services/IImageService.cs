@@ -1,4 +1,4 @@
-﻿using RedditTextToSpeech.Core;
+﻿using RedditTextToSpeech.Core.Interfaces;
 using System.Threading.Tasks;
 
 namespace RedditTextToSpeech.Logic.Services
@@ -19,7 +19,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="path">The image path to save to.</param>
         /// <param name="post">The post to display.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetImage(string path, Post post);
+        Task<string> GetImage(string path, IPost post);
 
         /// <summary>
         /// Gets a image representing a reddit comment start.
@@ -27,7 +27,7 @@ namespace RedditTextToSpeech.Logic.Services
         /// <param name="path">The image path to save to.</param>
         /// <param name="comment">The comment to display.</param>
         /// <returns>Awaitable task returning path.</returns>
-        Task<string> GetImage(string path, Comment comment);
+        Task<string> GetImage(string path, IComment comment);
 
         /// <summary>
         /// Gets a blank text image.

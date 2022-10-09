@@ -1,4 +1,4 @@
-﻿namespace RedditTextToSpeech.Core
+﻿namespace RedditTextToSpeech.Core.Content
 {
     /// <summary>
     /// Gender which is used to select a voice.
@@ -7,6 +7,7 @@
     public enum Gender
     {
         Male,
-        Female
+        Female,
+        Unknown
     }
 }

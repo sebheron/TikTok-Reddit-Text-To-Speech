@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using RedditTextToSpeech.Core.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace RedditTextToSpeech.Core
+namespace RedditTextToSpeech.Core.Content
 {
     /// <summary>
     /// Class which contains specific comment information retrieved from reddit.
     /// The comment class exists as a child of the post class.
     /// If information is not available it will be blank.
     /// </summary>
-    public class Comment
+    public class Comment : IComment
     {
         /// <summary>
         /// Instance of a comment
@@ -18,11 +20,11 @@ namespace RedditTextToSpeech.Core
         /// <param name="flair"></param>
         public Comment(Post post, string image, string username, IList<string> content, string flair)
         {
-            this.Post = post;
-            this.Image = image;
-            this.Username = username;
-            this.Content = content;
-            this.Flair = flair;
+            Post = post;
+            Image = image;
+            Username = username;
+            Content = content;
+            Flair = flair;
         }
 
         /// <summary>
@@ -49,5 +51,10 @@ namespace RedditTextToSpeech.Core
         /// Gets the username.
         /// </summary>
         public string Username { get; }
+
+        /// <summary>
+        /// First content entry.
+        /// </summary>
+        public string First => this.Content?.FirstOrDefault() ?? string.Empty;
     }
 }

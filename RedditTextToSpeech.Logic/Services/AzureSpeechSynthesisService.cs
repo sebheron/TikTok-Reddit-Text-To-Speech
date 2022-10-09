@@ -1,4 +1,5 @@
-﻿using RedditTextToSpeech.Logic.Services.Azure;
+﻿using RedditTextToSpeech.Logic.Containers;
+using RedditTextToSpeech.Logic.Services.Azure;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -70,6 +71,8 @@ namespace RedditTextToSpeech.Logic.Services
             "en-US-JacobNeural",
             "en-GB-AlfieNeural"
         };
+
+        public IVoice[] Voices => throw new NotImplementedException();
 
         /// <summary>
         /// Gets the sound.

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using RedditTextToSpeech.Core;
+using RedditTextToSpeech.Core.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
